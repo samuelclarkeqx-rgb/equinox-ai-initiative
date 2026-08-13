@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project RISE — Board AIJD — Brian (L1 Agent)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  :root {
+    --navy: #0B1F3A; --blue: #1E6FD9; --blue-light: #3D8EF0;
+    --cyan: #00C2E0; --white: #FFFFFF; --off-white: #EDF2F8; --gray: #8A9BB5;
+    --card-bg: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    --red: #FF4D4D; --green: #4ADE80; --yellow: #FBBF24; --purple: #A78BFA;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--navy); color:var(--white); font-family:'Inter',sans-serif; line-height:1.7; }
+
+  .hero {
+    min-height:60vh; display:flex; flex-direction:column; justify-content:center;
+    align-items:center; text-align:center; padding:60px 40px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,194,224,0.2) 0%, transparent 70%), var(--navy);
+    position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:40px 40px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,194,224,0.1); border:1px solid rgba(0,194,224,0.3); color:var(--cyan); padding:6px 16px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:32px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(32px,5vw,64px); font-weight:700; letter-spacing:-2px; line-height:1.0; margin-bottom:12px; }
+  .hero h1 .accent { color:var(--cyan); }
+  .hero-sub { font-size:clamp(14px,2vw,18px); color:var(--gray); max-width:600px; margin:0 auto 12px; }
+  .hero-tagline { font-size:13px; color:var(--cyan); font-style:italic; margin-bottom:40px; }
+  .hero-meta { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:14px; font-weight:600; color:var(--off-white); margin-top:2px; }
+
+  section { max-width:960px; margin:0 auto; padding:60px 40px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
+  h2 { font-family:'Space Grotesk',sans-serif; font-size:clamp(20px,3vw,30px); font-weight:700; color:var(--white); margin-bottom:16px; letter-spacing:-0.5px; }
+  p { color:#B0BDD0; font-size:15px; margin-bottom:14px; }
+  .divider { border:none; border-top:1px solid var(--border); margin:0; }
+
+  /* LEGEND */
+  .legend { display:flex; gap:24px; flex-wrap:wrap; margin-bottom:32px; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--gray); }
+  .legend-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+  .dot-human { background:#3D8EF0; }
+  .dot-ai { background:#00C2E0; }
+  .dot-shared { background:#A78BFA; }
+
+  /* JD ROWS */
+  .jd-section { margin-bottom:40px; }
+  .jd-section-title { font-size:14px; font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .jd-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .jd-human { background:rgba(61,142,240,0.06); border:1px solid rgba(61,142,240,0.2); border-left:3px solid #3D8EF0; border-radius:10px; padding:16px 20px; }
+  .jd-ai { background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.2); border-left:3px solid var(--cyan); border-radius:10px; padding:16px 20px; }
+  .jd-human-only { background:rgba(61,142,240,0.06); border:1px solid rgba(61,142,240,0.2); border-left:3px solid #3D8EF0; border-radius:10px; padding:16px 20px; grid-column:1; }
+  .jd-ai-only { background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.2); border-left:3px solid var(--cyan); border-radius:10px; padding:16px 20px; grid-column:2; }
+
+  .role-tag { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .human-tag { color:#3D8EF0; }
+  .ai-tag { color:var(--cyan); }
+  .card-title { font-size:14px; font-weight:600; color:var(--white); margin-bottom:6px; }
+  .card-desc { font-size:13px; color:#8A9BB5; line-height:1.6; }
+  .handoff-note { background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:8px; padding:10px 16px; margin-top:8px; font-size:12px; color:#A78BFA; }
+
+  /* BRIAN'S PROPOSAL BOX */
+  .proposal-box { background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.3); border-left:3px solid var(--cyan); border-radius:12px; padding:28px; margin-top:24px; }
+  .proposal-box h3 { color:var(--white); font-size:16px; font-weight:600; margin-bottom:12px; }
+  .proposal-box p { font-size:14px; }
+  ul.simple { list-style:none; margin-top:8px; }
+  ul.simple li { font-size:13px; color:#8A9BB5; padding:4px 0 4px 16px; position:relative; }
+  ul.simple li::before { content:'▸'; position:absolute; left:0; color:var(--cyan); font-size:11px; top:5px; }
+
+  /* SUMMARY TABLE */
+  .summary-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:13px; }
+  .summary-table th { background:rgba(30,111,217,0.3); color:var(--cyan); font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+  .summary-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:#B0BDD0; vertical-align:top; }
+  .summary-table tr:last-child td { border-bottom:none; }
+  .summary-table td:first-child { color:var(--white); font-weight:500; }
+  .summary-table tr:nth-child(odd) td { background:rgba(255,255,255,0.02); }
+
+  .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:600; }
+  .tag-ai { background:rgba(0,194,224,0.1); color:var(--cyan); border:1px solid rgba(0,194,224,0.3); }
+  .tag-human { background:rgba(61,142,240,0.1); color:#3D8EF0; border:1px solid rgba(61,142,240,0.3); }
+  .tag-shared { background:rgba(167,139,250,0.1); color:#A78BFA; border:1px solid rgba(167,139,250,0.3); }
+
+  footer { text-align:center; padding:40px; border-top:1px solid var(--border); color:var(--gray); font-size:13px; }
+  footer strong { color:var(--white); }
+
+  @media(max-width:600px) {
+    section { padding:40px 20px; }
+    .jd-row { grid-template-columns:1fr; }
+    .jd-ai-only { grid-column:1; }
+    .legend { gap:12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span>🤖</span> Project RISE · Board · Agent AIJD</div>
+  <h1>Brian + <span class="accent">AI Partner</span></h1>
+  <p class="hero-sub">Human Job Description alongside AI Job Description — L1 Support Agent (Most Tenured)</p>
+  <p class="hero-tagline">"AI handles the searching, Brian focuses on solving."</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Role</div><div class="value">L1 Support Agent — Board</div></div>
+    <div class="hero-meta-item"><div class="label">AI Tasks</div><div class="value">8 Identified</div></div>
+    <div class="hero-meta-item"><div class="label">Brian's Proposal</div><div class="value">SFDC Alert System</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- LEGEND -->
+<section>
+  <div class="section-label">How to Read This Document</div>
+  <h2>Human JD + AI JD — Side by Side</h2>
+  <p>Each responsibility from Brian's JD is shown alongside what an AI partner will handle. Brian focuses on judgment, customer relationships, and complex problem solving — AI handles the repetitive, time-consuming tasks that slow him down.</p>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-human"></div>Human — Brian owns this</div>
+    <div class="legend-item"><div class="legend-dot dot-ai"></div>AI — AI partner handles this</div>
+    <div class="legend-item"><div class="legend-dot dot-shared"></div>Human-in-the-Loop — AI does, Brian reviews</div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 1: DAILY OPERATIONS -->
+<section>
+  <div class="section-label">01 · Daily Operations</div>
+  <h2>Queue & Ticket Management</h2>
+
+  <div class="jd-section">
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Support Queue Management</div>
+        <div class="card-desc">Actively manage and handle support tickets, ensuring cases are appropriately prioritized and progressed.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Smart Queue Prioritizer</div>
+        <div class="card-desc">Automatically prioritizes the queue by urgency, customer type, SLA risk, and issue severity — presenting Brian with a ranked list of what to work on first each day.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews prioritized queue and begins work — no manual sorting needed.</div>
+      </div>
+    </div>
+
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Ticket Quality Review</div>
+        <div class="card-desc">Review agent responses before submission to ensure accuracy, quality, and appropriate customer communication.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Pre-Send Quality Check</div>
+        <div class="card-desc">Before Brian sends any response, AI automatically checks for tone, accuracy, completeness, and correct SOP adherence — flagging issues with suggested corrections.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews AI suggestions, makes final call, sends response.</div>
+      </div>
+    </div>
+
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Queue Monitoring</div>
+        <div class="card-desc">Monitor the support queue and prioritize cases based on urgency, customer type, and issue severity.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Real-Time Queue Monitor</div>
+        <div class="card-desc">Continuously monitors queue health — alerts Brian when SLA is at risk, when a high-priority customer submits a case, or when queue volume spikes unexpectedly.</div>
+        <div class="handoff-note">⚡ Handoff: Brian receives alerts and decides action — no constant manual monitoring needed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 2: TECHNICAL & KNOWLEDGE -->
+<section>
+  <div class="section-label">02 · Technical Support & Knowledge</div>
+  <h2>Troubleshooting & Research</h2>
+
+  <div class="jd-section">
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Ticket Troubleshooting</div>
+        <div class="card-desc">Assist agents with troubleshooting complex scenarios, identifying appropriate solutions, and communicating new technical updates.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">AI Troubleshooting Suggester</div>
+        <div class="card-desc">When a new ticket arrives, AI instantly searches Salesforce, Help.Board.com, Community Portal, internal docs, and resolved tickets — surfacing the most relevant troubleshooting steps before Brian even opens the case.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews AI suggestions, applies expertise, resolves the case.</div>
+      </div>
+    </div>
+
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Resolution & Knowledge Capture</div>
+        <div class="card-desc">Identify reusable workarounds and resolutions from support cases and convert them into help articles for future reference.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Auto Knowledge Article Generator</div>
+        <div class="card-desc">When a ticket is resolved, AI automatically drafts a knowledge article from the ticket conversation — issue, steps taken, resolution — ready for Brian to review and publish.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews draft, approves or edits, publishes to knowledge base.</div>
+      </div>
+    </div>
+
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Infrastructure Monitoring</div>
+        <div class="card-desc">Monitor PagerDuty for critical infrastructure incidents and coordinate appropriate actions.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Incident Alert Classifier</div>
+        <div class="card-desc">Automatically classifies incoming PagerDuty alerts by severity and type — filters noise, surfaces only genuinely critical incidents, and suggests the appropriate response action.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews classified alerts and coordinates the response.</div>
+      </div>
+    </div>
+
+    <div class="jd-row">
+      <div class="jd-human">
+        <div class="role-tag human-tag">👤 Human — Brian</div>
+        <div class="card-title">Community Queue Management</div>
+        <div class="card-desc">Monitor the Community queue and assist with issues reported by learners.</div>
+      </div>
+      <div class="jd-ai">
+        <div class="role-tag ai-tag">🤖 AI Partner</div>
+        <div class="card-title">Community Queue Monitor</div>
+        <div class="card-desc">Monitors Community queue in parallel with the main support queue — flags issues that need Brian's attention and suggests responses based on similar community posts that were already resolved.</div>
+        <div class="handoff-note">⚡ Handoff: Brian reviews flagged community issues and responds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 3: BRIAN'S OWN PROPOSAL -->
+<section>
+  <div class="section-label">03 · Brian's AI Proposal</div>
+  <h2>SFDC Smart Alert System</h2>
+  <p>Brian identified a specific, high-value AI opportunity from his daily experience — this is his own proposed solution.</p>
+
+  <div class="proposal-box">
+    <h3>🔔 SFDC Customer Update Alert</h3>
+    <p><strong style="color:#fff">The Problem:</strong> Board International does not update Salesforce frequently. Important customer info — like special SLAs, triage rules, and account-specific notes — is shared via Microsoft Teams and tracked manually in a Google Sheet. Agents must remember to check this sheet before handling every ticket.</p>
+    <p><strong style="color:#fff">Brian's Proposed Solution:</strong></p>
+    <ul class="simple">
+      <li>Agent opens a case on Salesforce</li>
+      <li>AI automatically checks the Google Sheet for any relevant update matching the customer, account, or issue type</li>
+      <li>If a match is found — a pop-up alert appears on SFDC immediately</li>
+      <li>Agent reads the alert and proceeds with the correct action</li>
+    </ul>
+    <p style="margin-top:16px;"><strong style="color:#fff">Example 1:</strong> UNHCR case opens — AI alerts "UNHCR is not a Premium customer despite SFDC showing otherwise. Follow non-Premium SOP."</p>
+    <p><strong style="color:#fff">Example 2:</strong> Primark case with product issue — AI alerts "All Primark product-related cases must be triaged to the Wipro queue."</p>
+    <p style="margin-top:16px; color:#4ADE80; font-size:13px; font-weight:600;">⚡ Impact: Eliminates manual Google Sheet checking, prevents SOP errors, ensures correct routing on every ticket.</p>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 4: HUMAN ONLY -->
+<section>
+  <div class="section-label">04 · Human Only — No AI</div>
+  <h2>What Stays With Brian</h2>
+  <p>These responsibilities require Brian's expertise, relationships, and judgment — AI does not replace these.</p>
+
+  <div class="jd-section">
+    <div class="jd-row">
+      <div class="jd-human-only">
+        <div class="role-tag human-tag">👤 Human Only</div>
+        <div class="card-title">Customer & Client Calls</div>
+        <div class="card-desc">Arranging and participating in customer and client calls to investigate complex issues, build relationships, and discuss challenges — requires human communication and trust.</div>
+      </div>
+      <div class="jd-ai-only">
+        <div class="role-tag human-tag">👤 Human Only</div>
+        <div class="card-title">Training & Onboarding New Agents</div>
+        <div class="card-desc">Training new agents on product knowledge, support processes, and team culture requires Brian's experience, empathy, and ability to read how a new agent is progressing.</div>
+      </div>
+    </div>
+    <div class="jd-row">
+      <div class="jd-human-only">
+        <div class="role-tag human-tag">👤 Human Only</div>
+        <div class="card-title">Agent Support & Guidance</div>
+        <div class="card-desc">Assisting colleagues with doubts and complex scenarios in real time — this requires human judgment, experience, and the ability to explain nuanced situations clearly.</div>
+      </div>
+      <div class="jd-ai-only">
+        <div class="role-tag human-tag">👤 Human Only</div>
+        <div class="card-title">Stakeholder & Academy Collaboration</div>
+        <div class="card-desc">Maintaining alignment with LOB stakeholders and collaborating with the Academy team on course creation requires relationship management and strategic judgment.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 5: SUMMARY TABLE -->
+<section>
+  <div class="section-label">05 · Summary</div>
+  <h2>Brian + AI — At a Glance</h2>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Responsibility</th>
+        <th>Human Role</th>
+        <th>AI Role</th>
+        <th>Ownership</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Queue Management & Prioritization</td><td>Works prioritized queue</td><td>Auto-ranks by urgency, SLA, customer type</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Ticket Quality Review</td><td>Final review & send</td><td>Pre-send tone, accuracy, SOP check</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Queue Monitoring</td><td>Acts on alerts</td><td>Continuous monitoring, SLA risk alerts</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Ticket Troubleshooting</td><td>Applies expertise, resolves</td><td>Searches all sources, suggests steps</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Knowledge Capture</td><td>Reviews, approves, publishes</td><td>Auto-drafts article from resolved ticket</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Infrastructure Monitoring</td><td>Coordinates response</td><td>Classifies alerts, filters noise</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Community Queue</td><td>Responds to flagged issues</td><td>Monitors, flags, suggests responses</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>SFDC Customer Alert (Brian's Proposal)</td><td>Reviews alert, takes action</td><td>Checks Google Sheet, pops alert on SFDC</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Customer & Client Calls</td><td>Fully owns</td><td>—</td><td><span class="tag tag-human">Human Only</span></td></tr>
+      <tr><td>Training & Onboarding</td><td>Fully owns</td><td>—</td><td><span class="tag tag-human">Human Only</span></td></tr>
+      <tr><td>Agent Support & Guidance</td><td>Fully owns</td><td>—</td><td><span class="tag tag-human">Human Only</span></td></tr>
+      <tr><td>Stakeholder & Academy Collaboration</td><td>Fully owns</td><td>—</td><td><span class="tag tag-human">Human Only</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<hr class="divider">
+
+<footer>
+  <p><strong>Project RISE — Board AIJD — Brian (L1 Agent)</strong> · Equinox Agents · August 2026</p>
+  <p style="margin-top:8px">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
+  <p style="margin-top:16px;font-style:italic;color:#4A6080">"AI handles the searching. Brian focuses on solving."</p>
+</footer>
+
+</body>
+</html>

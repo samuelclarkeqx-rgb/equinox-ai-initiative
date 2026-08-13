@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project RISE — Board AI Opportunities</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  :root {
+    --navy: #0B1F3A; --blue: #1E6FD9; --blue-light: #3D8EF0;
+    --cyan: #00C2E0; --white: #FFFFFF; --off-white: #EDF2F8; --gray: #8A9BB5;
+    --card-bg: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    --red: #FF4D4D; --green: #4ADE80; --yellow: #FBBF24;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--navy); color:var(--white); font-family:'Inter',sans-serif; line-height:1.7; }
+
+  .hero {
+    min-height: 70vh; display:flex; flex-direction:column; justify-content:center;
+    align-items:center; text-align:center; padding:60px 40px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30,111,217,0.25) 0%, transparent 70%), var(--navy);
+    position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:40px 40px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,194,224,0.1); border:1px solid rgba(0,194,224,0.3); color:var(--cyan); padding:6px 16px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:32px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(36px,6vw,72px); font-weight:700; letter-spacing:-2px; line-height:1.0; margin-bottom:12px; }
+  .hero h1 .accent { color:var(--cyan); }
+  .hero-sub { font-size:clamp(14px,2vw,18px); color:var(--gray); max-width:600px; margin:0 auto 12px; }
+  .hero-tagline { font-size:13px; color:var(--cyan); font-style:italic; margin-bottom:40px; }
+  .hero-meta { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:14px; font-weight:600; color:var(--off-white); margin-top:2px; }
+
+  section { max-width:900px; margin:0 auto; padding:60px 40px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
+  h2 { font-family:'Space Grotesk',sans-serif; font-size:clamp(22px,3vw,32px); font-weight:700; color:var(--white); margin-bottom:16px; letter-spacing:-0.5px; }
+  h3 { font-size:18px; font-weight:600; color:var(--cyan); margin-bottom:12px; margin-top:32px; }
+  p { color:#B0BDD0; font-size:15px; margin-bottom:14px; }
+  .divider { border:none; border-top:1px solid var(--border); margin:0; }
+
+  /* OPPORTUNITY CARDS */
+  .opp-grid { display:flex; flex-direction:column; gap:16px; margin-top:24px; }
+  .opp-card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .opp-card:hover { border-color:rgba(0,194,224,0.3); }
+  .opp-header { display:flex; align-items:flex-start; gap:16px; margin-bottom:12px; }
+  .opp-num { width:32px; height:32px; border-radius:8px; background:rgba(30,111,217,0.2); border:1px solid rgba(30,111,217,0.4); color:var(--blue-light); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .opp-title { font-size:16px; font-weight:600; color:var(--white); }
+  .opp-source { font-size:11px; color:var(--gray); margin-top:3px; }
+  .opp-body { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+  .opp-col h4 { font-size:11px; font-weight:700; color:var(--cyan); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .opp-col p { font-size:13px; color:#8A9BB5; margin:0; }
+
+  /* TAGS */
+  .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:600; margin-top:8px; }
+  .tag-quick { background:rgba(74,222,128,0.1); color:#4ADE80; border:1px solid rgba(74,222,128,0.3); }
+  .tag-high { background:rgba(0,194,224,0.1); color:var(--cyan); border:1px solid rgba(0,194,224,0.3); }
+  .tag-medium { background:rgba(251,191,36,0.1); color:var(--yellow); border:1px solid rgba(251,191,36,0.3); }
+
+  /* JD SECTION */
+  .jd-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; }
+  .jd-card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:20px; }
+  .jd-card h4 { font-size:13px; font-weight:700; color:var(--cyan); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px; }
+  .jd-card ul { list-style:none; }
+  .jd-card ul li { font-size:13px; color:#8A9BB5; padding:4px 0 4px 16px; position:relative; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .jd-card ul li:last-child { border-bottom:none; }
+  .jd-card ul li::before { content:'▸'; position:absolute; left:0; color:var(--blue-light); font-size:11px; top:5px; }
+
+  /* PROPOSAL BOX */
+  .proposal-box { background:rgba(30,111,217,0.08); border:1px solid rgba(30,111,217,0.3); border-left:3px solid var(--blue); border-radius:12px; padding:28px; margin-top:24px; }
+  .proposal-box h3 { color:var(--white); margin-top:0; }
+  .proposal-box p { font-size:14px; }
+  ul.simple { list-style:none; margin-top:8px; }
+  ul.simple li { font-size:13px; color:#8A9BB5; padding:4px 0 4px 16px; position:relative; }
+  ul.simple li::before { content:'▸'; position:absolute; left:0; color:var(--cyan); font-size:11px; top:5px; }
+
+  footer { text-align:center; padding:40px; border-top:1px solid var(--border); color:var(--gray); font-size:13px; }
+  footer strong { color:var(--white); }
+
+  @media(max-width:600px) {
+    section { padding:40px 20px; }
+    .opp-body { grid-template-columns:1fr; }
+    .jd-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span>⚡</span> Project RISE · Board Process</div>
+  <h1>Board <span class="accent">AI Opportunities</span></h1>
+  <p class="hero-sub">Pain Areas, AI Integration Opportunities & Role Overview</p>
+  <p class="hero-tagline">"Identify first. Design second. Build third."</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Process Owner</div><div class="value">Abhinav</div></div>
+    <div class="hero-meta-item"><div class="label">Contributors</div><div class="value">Abhinav · Suchirmay · Jamal</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Opportunities</div><div class="value">12 Identified</div></div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- SECTION 1: PROCESS OWNER JD -->
+<section>
+  <div class="section-label">01 · Role Overview</div>
+  <h2>Abhinav — Process Owner JD</h2>
+  <p>The following responsibilities were shared by Abhinav covering his day-to-day ownership of the Board L1 Support process.</p>
+
+  <div class="jd-grid">
+    <div class="jd-card">
+      <h4>Daily Operations</h4>
+      <ul>
+        <li>Attendance & headcount management</li>
+        <li>Shrinkage tracking and coverage planning</li>
+        <li>Support queue management</li>
+        <li>Ticket quality review before submission</li>
+        <li>Real-time QA monitoring across shifts</li>
+      </ul>
+    </div>
+    <div class="jd-card">
+      <h4>Technical & Knowledge</h4>
+      <ul>
+        <li>Ticket troubleshooting & agent coaching</li>
+        <li>Resolution & knowledge capture</li>
+        <li>Weekly knowledge sessions</li>
+        <li>KCS article creation from recordings</li>
+        <li>SharePoint documentation maintenance</li>
+      </ul>
+    </div>
+    <div class="jd-card">
+      <h4>Recruitment</h4>
+      <ul>
+        <li>Candidate chat assessments</li>
+        <li>Board candidate interviews</li>
+        <li>Internal L2 assessments</li>
+        <li>L2 hiring coordination with Premium Support</li>
+      </ul>
+    </div>
+    <div class="jd-card">
+      <h4>Performance & Reporting</h4>
+      <ul>
+        <li>KPI & performance tracking</li>
+        <li>QBR insights & reporting</li>
+        <li>Leadership performance updates</li>
+        <li>Cross-shift knowledge sharing</li>
+        <li>Stakeholder alignment across LOBs</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 2: AI OPPORTUNITIES FROM ABHINAV -->
+<section>
+  <div class="section-label">02 · Opportunities — Abhinav</div>
+  <h2>Process Owner Level</h2>
+  <p>Opportunities identified by Abhinav from a team lead and operations perspective.</p>
+
+  <div class="opp-grid">
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">1</div>
+        <div><div class="opp-title">Manual KCS Article Creation</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Manually converting ticket resolutions and session recordings into KCS articles</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Auto-generate KCS articles from resolved tickets and approved resources</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Less documentation effort, faster knowledge creation</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">2</div>
+        <div><div class="opp-title">Manual QA Analysis</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Manually reviewing ticket interactions for quality across multiple agents and shifts</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>AI-powered QA evaluation using predefined quality parameters</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Less manual QA effort, consistent scoring, faster agent feedback</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">3</div>
+        <div><div class="opp-title">Cross-Shift Knowledge Gaps</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Critical updates not consistently reaching agents across different shifts</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Centralized AI knowledge portal with automated update emails to all agents</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Consistent knowledge across shifts, accessible for future reference</p></div>
+      </div>
+      <span class="tag tag-medium">Medium Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">4</div>
+        <div><div class="opp-title">Manual Daily Submissions</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Agents manually submitting daily ticket and training task reports</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Automate daily ticket and training task submissions and tracking</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Less manual effort, better compliance and submission tracking</p></div>
+      </div>
+      <span class="tag tag-quick">Quick Win</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">5</div>
+        <div><div class="opp-title">Fragmented Productivity Tracking</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>No direct source to track punctuality and agent productivity</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>AI dashboard tracking punctuality and productivity per agent in real time</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Single source of truth — no manual tracking needed</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">6</div>
+        <div><div class="opp-title">Repeated Troubleshooting Effort</div><div class="opp-source">Source: Abhinav</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Agents re-investigating similar issues that have already been resolved before</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>AI knowledge base from resolved tickets — suggests similar resolutions in real time</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Faster resolution, consistent answers, less investigation time</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 3: SUCHIRMAY PROPOSAL -->
+<section>
+  <div class="section-label">03 · Proposal — Suchirmay</div>
+  <h2>AI Case Assistance Agent</h2>
+
+  <div class="proposal-box">
+    <h3>🤖 Intelligent Case Assistance for L1 Support</h3>
+    <p>Currently agents manually copy case descriptions into ChatGPT, generate summaries, then separately search Salesforce for historical cases. This is a multi-step manual process for every single ticket.</p>
+    <p><strong style="color:#fff">Proposed Solution:</strong> An AI Case Assistance Agent integrated with Salesforce that automatically:</p>
+    <ul class="simple">
+      <li>Analyzes the customer description on ticket creation</li>
+      <li>Generates an accurate internal case summary</li>
+      <li>Prepares a professional acknowledgement for the first response</li>
+      <li>Searches historical cases for similar issues, resolutions, and troubleshooting approaches</li>
+      <li>Presents all recommendations to the agent before they respond</li>
+    </ul>
+    <p style="margin-top:16px;"><strong style="color:#fff">Example:</strong> If a customer reports a FlexGrid issue, the AI identifies similar historical cases, recommends the most relevant troubleshooting steps, and suggests diagnostic questions — all before the agent types a single word.</p>
+    <span class="tag tag-high">High Priority</span>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 4: JAMAL OPPORTUNITIES -->
+<section>
+  <div class="section-label">04 · Opportunities — Jamal</div>
+  <h2>L1 Agent Level — Repetitive Activities</h2>
+  <p>Jamal documented 6 specific repetitive activities performed daily by L1 Support agents — these represent the ground-level friction that slows down every ticket.</p>
+
+  <div class="opp-grid">
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">7</div>
+        <div><div class="opp-title">Case Summary Preparation</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Every new ticket requires manually reading, understanding, and summarizing before it can be forwarded</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Auto-generate concise internal case summary on ticket creation — product, environment, version, error identified automatically</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Significant time saved per ticket — especially for complex tickets with logs and screenshots</p></div>
+      </div>
+      <span class="tag tag-quick">Quick Win</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">8</div>
+        <div><div class="opp-title">Duplicate & Spam Notifications</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Hundreds of monitoring alerts, OOO replies, thank-you emails, spam — each requiring manual open, review, and close. Mass events can exceed 500 notifications</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Auto-detect and close duplicate alerts, OOO replies, thank-you messages, spam, and mass notification events without agent involvement</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Major time saving — agents focus only on genuine customer issues</p></div>
+      </div>
+      <span class="tag tag-quick">Quick Win</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">9</div>
+        <div><div class="opp-title">Portal Registration Process</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Every registration request requires 7 manual Salesforce verification steps before access can be granted</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Auto-verify account in Salesforce — SSO status, account type, eligibility, access level — present result to agent for final approval</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Faster registration processing, less repetitive Salesforce lookups</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">10</div>
+        <div><div class="opp-title">Knowledge Base Research</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Agents manually search 6+ sources — Salesforce, Help.Board.com, Community Portal, internal docs, Release Notes, Known Issues</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Unified AI search across all sources — returns ranked relevant results for the specific issue in seconds</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Drastically reduced research time, consistent answers across agents</p></div>
+      </div>
+      <span class="tag tag-high">High Priority</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">11</div>
+        <div><div class="opp-title">Standard Email Responses</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Acknowledgements, screenshot requests, log requests, closure emails — templates exist but agents still manually select, edit, and customize each one</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>AI suggests the right template automatically based on ticket context — pre-filled and ready to send</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Faster responses, consistent tone and format across all agents</p></div>
+      </div>
+      <span class="tag tag-quick">Quick Win</span>
+    </div>
+
+    <div class="opp-card">
+      <div class="opp-header">
+        <div class="opp-num">12</div>
+        <div><div class="opp-title">Multilingual Translation</div><div class="opp-source">Source: Jamal</div></div>
+      </div>
+      <div class="opp-body">
+        <div class="opp-col"><h4>Pain Area</h4><p>Cases arrive in German, Italian, Spanish, French, Japanese — agents manually translate before investigation and again before responding</p></div>
+        <div class="opp-col"><h4>AI Opportunity</h4><p>Auto-translate incoming case to English for agent — auto-translate agent response back to customer's language before sending</p></div>
+        <div class="opp-col"><h4>Expected Benefit</h4><p>Faster multilingual support, no translation delay, consistent quality</p></div>
+      </div>
+      <span class="tag tag-medium">Medium Priority</span>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 5: SUMMARY -->
+<section>
+  <div class="section-label">05 · Summary</div>
+  <h2>12 AI Opportunities — Board Process</h2>
+  <p>Three team members contributed to identifying opportunities across two levels — Process Owner and L1 Agent.</p>
+
+  <table style="width:100%;border-collapse:collapse;margin-top:20px;font-size:13px;">
+    <thead>
+      <tr>
+        <th style="background:rgba(30,111,217,0.3);color:var(--cyan);padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);">#</th>
+        <th style="background:rgba(30,111,217,0.3);color:var(--cyan);padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);">Opportunity</th>
+        <th style="background:rgba(30,111,217,0.3);color:var(--cyan);padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);">Source</th>
+        <th style="background:rgba(30,111,217,0.3);color:var(--cyan);padding:12px 16px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);">Priority</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">1</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Manual KCS Article Creation</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">2</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Manual QA Analysis</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">3</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Cross-Shift Knowledge Gaps</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-medium">Medium</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">4</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Manual Daily Submissions</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-quick">Quick Win</span></td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">5</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Fragmented Productivity Tracking</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">6</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Repeated Troubleshooting Effort</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Abhinav</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">7</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">AI Case Assistance Agent</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Suchirmay</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">8</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Case Summary Preparation</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Jamal</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-quick">Quick Win</span></td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">9</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Duplicate & Spam Notifications</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Jamal</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-quick">Quick Win</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">10</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Portal Registration Process</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Jamal</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-high">High</span></td></tr>
+      <tr style="background:rgba(255,255,255,0.02);"><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">11</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Standard Email Responses</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Jamal</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-quick">Quick Win</span></td></tr>
+      <tr><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">12</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:var(--white);font-weight:500;">Multilingual Translation</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);color:#B0BDD0;">Jamal</td><td style="padding:12px 16px;border-bottom:1px solid var(--border);"><span class="tag tag-medium">Medium</span></td></tr>
+    </tbody>
+  </table>
+</section>
+<hr class="divider">
+
+<footer>
+  <p><strong>Project RISE — Board AI Opportunities</strong> · Equinox Agents · August 2026</p>
+  <p style="margin-top:8px">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
+  <p style="margin-top:16px;font-style:italic;color:#4A6080">"Identify first. Design second. Build third."</p>
+</footer>
+
+</body>
+</html>

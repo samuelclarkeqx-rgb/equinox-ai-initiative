@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project RISE — Virtuous Pilot</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  :root {
+    --navy: #0B1F3A; --navy-mid: #112244; --blue: #1E6FD9; --blue-light: #3D8EF0;
+    --cyan: #00C2E0; --white: #FFFFFF; --off-white: #EDF2F8; --gray: #8A9BB5;
+    --card-bg: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
+    --red: #FF4D4D; --green: #4ADE80; --orange: #FB923C; --yellow: #FBBF24;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--navy); color:var(--white); font-family:'Inter',sans-serif; line-height:1.7; }
+
+  .hero {
+    min-height: 80vh; display:flex; flex-direction:column; justify-content:center;
+    align-items:center; text-align:center; padding:60px 40px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30,111,217,0.25) 0%, transparent 70%), var(--navy);
+    position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:40px 40px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,194,224,0.1); border:1px solid rgba(0,194,224,0.3); color:var(--cyan); padding:6px 16px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:32px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(36px,6vw,72px); font-weight:700; letter-spacing:-2px; line-height:1.0; margin-bottom:12px; }
+  .hero h1 .accent { color:var(--cyan); }
+  .hero-sub { font-size:clamp(14px,2vw,18px); color:var(--gray); max-width:600px; margin:0 auto 12px; }
+  .hero-tagline { font-size:13px; color:var(--cyan); font-style:italic; margin-bottom:40px; }
+  .hero-meta { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:14px; font-weight:600; color:var(--off-white); margin-top:2px; }
+
+  section { max-width:900px; margin:0 auto; padding:60px 40px; }
+  .section-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
+  h2 { font-family:'Space Grotesk',sans-serif; font-size:clamp(22px,3vw,32px); font-weight:700; color:var(--white); margin-bottom:16px; letter-spacing:-0.5px; }
+  p { color:#B0BDD0; font-size:15px; margin-bottom:14px; }
+  .divider { border:none; border-top:1px solid var(--border); margin:0; }
+
+  /* BASELINE TABLE */
+  .data-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:13px; }
+  .data-table th { background:rgba(30,111,217,0.3); color:var(--cyan); text-transform:uppercase; letter-spacing:1px; font-size:11px; font-weight:700; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+  .data-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:#B0BDD0; vertical-align:top; }
+  .data-table tr:last-child td { border-bottom:none; }
+  .data-table td:first-child { color:var(--white); font-weight:500; }
+  .data-table tr:nth-child(odd) td { background:rgba(255,255,255,0.02); }
+
+  .status-red { color:var(--red); font-weight:600; }
+  .status-green { color:var(--green); font-weight:600; }
+  .status-yellow { color:var(--yellow); font-weight:600; }
+
+  /* FINDING BOX */
+  .finding-box { background:rgba(255,77,77,0.08); border:1px solid rgba(255,77,77,0.3); border-left:3px solid var(--red); border-radius:12px; padding:24px; margin-top:24px; }
+  .finding-box strong { color:var(--white); }
+  .finding-box p { margin:0; color:#B0BDD0; }
+
+  /* AGENT CARDS */
+  .agent-card { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:28px; margin-top:20px; }
+  .agent-card h3 { font-size:16px; font-weight:600; color:var(--cyan); margin-bottom:16px; }
+  .pain-point { margin-top:20px; padding-top:20px; border-top:1px solid var(--border); }
+  .pain-point:first-of-type { margin-top:0; padding-top:0; border-top:none; }
+  .pain-point h4 { font-size:14px; font-weight:600; color:var(--white); margin-bottom:8px; }
+  .pain-point p { font-size:13px; margin:0; }
+  ul.simple { list-style:none; margin-top:8px; }
+  ul.simple li { font-size:13px; color:#8A9BB5; padding:4px 0 4px 16px; position:relative; }
+  ul.simple li::before { content:'▸'; position:absolute; left:0; color:var(--cyan); font-size:11px; top:5px; }
+
+  /* PRIORITY TABLE */
+  .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:600; }
+  .tag-quick { background:rgba(74,222,128,0.1); color:#4ADE80; border:1px solid rgba(74,222,128,0.3); }
+  .tag-high { background:rgba(0,194,224,0.1); color:var(--cyan); border:1px solid rgba(0,194,224,0.3); }
+  .tag-medium { background:rgba(251,191,36,0.1); color:var(--yellow); border:1px solid rgba(251,191,36,0.3); }
+  .tag-later { background:rgba(138,155,181,0.1); color:var(--gray); border:1px solid rgba(138,155,181,0.3); }
+
+  /* AI ROLE CARDS */
+  .ai-role { background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:28px; margin-top:20px; }
+  .ai-role h3 { font-size:15px; font-weight:600; color:var(--cyan); margin-bottom:16px; }
+  .role-row { display:flex; gap:16px; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .role-row:last-child { border-bottom:none; }
+  .role-label { color:var(--white); font-weight:600; width:120px; flex-shrink:0; }
+  .role-value { color:#B0BDD0; flex:1; }
+
+  /* METRICS TABLE */
+  .metrics-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:13px; }
+  .metrics-table th { background:rgba(30,111,217,0.3); color:var(--cyan); font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
+  .metrics-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:#B0BDD0; }
+  .metrics-table tr:last-child td { border-bottom:none; }
+  .metrics-table td:first-child { color:var(--white); font-weight:500; }
+  .metrics-table tr:nth-child(odd) td { background:rgba(255,255,255,0.02); }
+  .metrics-table .target { color:var(--green); font-weight:600; }
+
+  /* TIMELINE */
+  .timeline { margin-top:32px; }
+  .timeline-item { display:flex; gap:0; }
+  .tl-left { width:160px; flex-shrink:0; padding:20px 20px 20px 0; text-align:right; }
+  .tl-left .week { font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:700; color:var(--white); }
+  .tl-left .phase { font-size:10px; color:var(--cyan); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-top:3px; }
+  .tl-line { display:flex; flex-direction:column; align-items:center; padding:0 20px; }
+  .tl-dot { width:12px; height:12px; border-radius:50%; background:var(--cyan); box-shadow:0 0 10px var(--cyan); flex-shrink:0; margin-top:24px; }
+  .tl-track { width:2px; flex:1; background:linear-gradient(to bottom, var(--cyan), rgba(0,194,224,0.1)); }
+  .timeline-item:last-child .tl-track { display:none; }
+  .tl-right { flex:1; padding:16px 0 32px; }
+  .tl-right p { font-size:13px; color:#8A9BB5; margin:0; }
+
+  /* NEXT STEPS */
+  .steps-list { list-style:none; margin-top:20px; }
+  .steps-list li { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); font-size:14px; color:#B0BDD0; }
+  .steps-list li:last-child { border-bottom:none; }
+  .step-num { width:24px; height:24px; border-radius:50%; background:rgba(30,111,217,0.2); border:1px solid rgba(30,111,217,0.4); color:var(--blue-light); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+  footer { text-align:center; padding:40px; border-top:1px solid var(--border); color:var(--gray); font-size:13px; }
+  footer strong { color:var(--white); }
+
+  @media(max-width:600px) { section { padding:40px 20px; } .tl-left { width:100px; } }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span>⚡</span> Project RISE · Virtuous Pilot</div>
+  <h1>Virtuous <span class="accent">Pilot</span></h1>
+  <p class="hero-sub">Expected Outcomes, Metrics, Agent Insights & Pilot Framework</p>
+  <p class="hero-tagline">"Observe first. Design second. Build third."</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Prepared by</div><div class="value">Samuel</div></div>
+    <div class="hero-meta-item"><div class="label">Submitted to</div><div class="value">Piyush Parikh & Ashwin</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Pilot Team</div><div class="value">Virtuous — Zendesk</div></div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- SECTION 1: TEAM OVERVIEW -->
+<section>
+  <div class="section-label">01 · Team Overview</div>
+  <h2>Virtuous — The Pilot Unit</h2>
+  <p>The Virtuous team has been selected as the pilot unit for Project RISE. Starting with one focused team allows us to build, test, and measure the impact of AI roles in a controlled environment before scaling across Equinox.</p>
+  <ul class="simple">
+    <li>Channel: Zendesk — email-based ticket support only (no calls)</li>
+    <li>Team size: 4 agents — Charles Fisher, David Murray, Roger Dent, Jacob Miller + Kyle Smith (backup — covers during shrinkage)</li>
+    <li>Process Owner & QA: Kyle</li>
+    <li>Nature of work: Responding to inbound client emails via Zendesk tickets</li>
+  </ul>
+</section>
+<hr class="divider">
+
+<!-- SECTION 2: JULY BASELINE -->
+<section>
+  <div class="section-label">02 · July 2026 Baseline</div>
+  <h2>Actual Performance Data</h2>
+  <p>The following metrics are taken directly from the July 2026 Monthly Performance Report. These are the baselines against which AI agent impact will be measured.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Metric</th><th>Actual (July)</th><th>Target</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>FRT (First Reply Time)</td><td>166 hrs</td><td>4 hrs</td><td class="status-red">⚠ 41x over target</td></tr>
+      <tr><td>Resolution Time</td><td>303 hrs</td><td>100 hrs</td><td class="status-red">⚠ 3x over target</td></tr>
+      <tr><td>RWT (Requester Wait Time)</td><td>61 hrs</td><td>12 hrs</td><td class="status-red">⚠ 5x over target</td></tr>
+      <tr><td>CSAT Score</td><td>79%</td><td>95%</td><td class="status-red">⚠ 16% below target</td></tr>
+      <tr><td>SLA %</td><td>26%</td><td>—</td><td class="status-red">⚠ Very low</td></tr>
+      <tr><td>Solved Tickets %</td><td>83%</td><td>—</td><td class="status-green">✓ Acceptable</td></tr>
+      <tr><td>T2 Transfer Rate</td><td>18%</td><td>—</td><td class="status-yellow">~ Manageable</td></tr>
+      <tr><td>Total New Tickets</td><td>661</td><td>—</td><td>High volume</td></tr>
+      <tr><td>DSATs</td><td>12</td><td>—</td><td class="status-red">6 due to delayed response</td></tr>
+      <tr><td>QA Score</td><td>98.5%</td><td>—</td><td class="status-green">✓ Strong</td></tr>
+    </tbody>
+  </table>
+
+  <div class="finding-box">
+    <p><strong>Key Finding:</strong> The QA score of 98.5% confirms agents are not making quality errors — the core problem is speed and prioritization. <strong>6 out of 12 DSATs were caused by delayed first response alone.</strong> This is a process and tooling problem, not a people problem — and it is directly addressable with AI.</p>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 3: AGENT PERSPECTIVES -->
+<section>
+  <div class="section-label">03 · Agent Perspectives</div>
+  <h2>Ground-Level Insights</h2>
+  <p>To ensure AI solutions address real problems rather than assumed ones, we conducted direct conversations with the Process Owner (Kyle) and a front-line agent (Jacob Miller).</p>
+
+  <div class="agent-card">
+    <h3>Kyle — Process Owner & QA</h3>
+    <ul class="simple">
+      <li>QA Audits — Automatically audit tickets and flag those with poorest customer experience</li>
+      <li>Weekly & Monthly Reporting — Auto-generate performance reports with metrics and trends</li>
+      <li>Pending Follow-Up Reminders — Automatically remind agents about tickets due for follow-up</li>
+      <li>Automated Follow-Ups & Closure — Auto follow-up after 48 hrs, auto-close after defined period</li>
+      <li>Agent Feedback — Generate actionable feedback based on ticket handling and performance trends</li>
+      <li>Quality Feedback — Identify recurring quality gaps and provide targeted recommendations</li>
+    </ul>
+  </div>
+
+  <div class="agent-card" style="margin-top:16px">
+    <h3>Jacob Miller — Front-Line Agent</h3>
+    <div class="pain-point">
+      <h4>Pain Point 1 — Manual Follow-Up Tracking</h4>
+      <p>Jacob currently has to manually track which tickets need a follow-up after 48 hours of no customer response. There is no automated reminder — agents rely on memory or manual checks. Jacob specifically asked for an automation that sends the first follow-up automatically, with him handling subsequent follow-ups himself.</p>
+    </div>
+    <div class="pain-point">
+      <h4>Pain Point 2 — Inaccurate Chatbot Summaries</h4>
+      <p>The client's Zendesk chatbot generates a ticket summary — but it is often inaccurate. A second summary from Corey (client's system) is more useful as it includes guided steps and sibling ticket links. Agents currently read both summaries manually and piece together the context themselves — adding significant time at the start of every ticket.</p>
+    </div>
+    <div class="pain-point">
+      <h4>Pain Point 3 — Repetitive Google Form Entry</h4>
+      <p>For certain ticket actions, agents must fill a Google Form with agent name, date, and ticket number — every single time. This same information is already available in Zendesk. Agents are manually re-entering data the system already has.</p>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 4: AI OPPORTUNITIES -->
+<section>
+  <div class="section-label">04 · AI Opportunities</div>
+  <h2>Prioritized by Impact</h2>
+  <p>Based on the July baseline data and direct agent conversations, 11 AI opportunities have been identified and prioritized by impact and build complexity.</p>
+
+  <table class="data-table">
+    <thead><tr><th>#</th><th>AI Opportunity</th><th>Expected Impact</th><th>Priority</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Auto Follow-up & Closure</td><td>Directly addresses 6/12 DSATs — biggest single impact on CSAT</td><td><span class="tag tag-quick">Quick Win</span></td><td>Jacob + Kyle</td></tr>
+      <tr><td>2</td><td>Ticket Summary Merger</td><td>Merge chatbot + Corey summary into one clean brief</td><td><span class="tag tag-quick">Quick Win</span></td><td>Jacob</td></tr>
+      <tr><td>3</td><td>Google Form Auto-fill</td><td>Eliminate repetitive data entry — pre-filled from Zendesk</td><td><span class="tag tag-quick">Quick Win</span></td><td>Jacob</td></tr>
+      <tr><td>4</td><td>Agent Bucket Health</td><td>Daily AI overview — urgent, pending, SLA risk, T2 candidates</td><td><span class="tag tag-high">High</span></td><td>Kyle</td></tr>
+      <tr><td>5</td><td>Missing Information Detector</td><td>Flag missing info before reply/escalation — reduce T2 from 18%</td><td><span class="tag tag-high">High</span></td><td>Kyle</td></tr>
+      <tr><td>6</td><td>QA Audit Agent</td><td>Auto-review 100% tickets — free up Kyle's QA time</td><td><span class="tag tag-high">High</span></td><td>Kyle</td></tr>
+      <tr><td>7</td><td>Stale Ticket Detector</td><td>Identify tickets with no real progress — not just by age</td><td><span class="tag tag-medium">Medium</span></td><td>Kyle</td></tr>
+      <tr><td>8</td><td>Duplicate/Incident Detector</td><td>Flag when multiple customers report same issue</td><td><span class="tag tag-medium">Medium</span></td><td>Kyle</td></tr>
+      <tr><td>9</td><td>Customer Sentiment Detector</td><td>Detect rising frustration — prioritize before DSAT happens</td><td><span class="tag tag-medium">Medium</span></td><td>Kyle</td></tr>
+      <tr><td>10</td><td>Agent Feedback Agent</td><td>Auto-generate actionable feedback per agent</td><td><span class="tag tag-medium">Medium</span></td><td>Kyle</td></tr>
+      <tr><td>11</td><td>Reporting Agent</td><td>Auto-generate weekly and monthly performance reports</td><td><span class="tag tag-later">Later</span></td><td>Kyle</td></tr>
+    </tbody>
+  </table>
+</section>
+<hr class="divider">
+
+<!-- SECTION 5: AI ROLES -->
+<section>
+  <div class="section-label">05 · Proposed AI Roles</div>
+  <h2>3 AI Roles for Pilot Phase</h2>
+  <p>We will build the smallest set of AI capabilities needed to test the highest-value roles first.</p>
+
+  <div class="ai-role">
+    <h3>🤖 AI Follow-up Agent — alongside every Agent</h3>
+    <div class="role-row"><span class="role-label">Purpose</span><span class="role-value">Automatically send the first follow-up email after 48 hours of no customer response — so no ticket is forgotten.</span></div>
+    <div class="role-row"><span class="role-label">Responsibilities</span><span class="role-value">Monitor all open tickets, detect 48-hour no-response threshold, send templated follow-up, flag ticket for agent.</span></div>
+    <div class="role-row"><span class="role-label">Boundaries</span><span class="role-value">Sends only the first follow-up. All subsequent follow-ups handled by agent. Never closes ticket without agent confirmation.</span></div>
+    <div class="role-row"><span class="role-label">Inputs</span><span class="role-value">Zendesk ticket status, last customer response timestamp, follow-up email templates.</span></div>
+    <div class="role-row"><span class="role-label">Outputs</span><span class="role-value">Automated follow-up email sent to customer, ticket flagged in agent view.</span></div>
+    <div class="role-row"><span class="role-label">Measurements</span><span class="role-value">Reduction in DSAT due to delayed response, FRT improvement, tickets auto-followed-up per week.</span></div>
+  </div>
+
+  <div class="ai-role">
+    <h3>📋 AI Ticket Brief Agent — alongside every Agent</h3>
+    <div class="role-row"><span class="role-label">Purpose</span><span class="role-value">Merge the chatbot summary and Corey summary into one clean, structured brief — so agents start every ticket with full context instantly.</span></div>
+    <div class="role-row"><span class="role-label">Responsibilities</span><span class="role-value">Read both summaries on ticket creation, extract key information, generate a single structured brief with issue, guided steps, and sibling ticket link.</span></div>
+    <div class="role-row"><span class="role-label">Boundaries</span><span class="role-value">Generates brief only — agent reads and acts. Never modifies original ticket content.</span></div>
+    <div class="role-row"><span class="role-label">Inputs</span><span class="role-value">Client chatbot summary, Corey's summary, sibling ticket references.</span></div>
+    <div class="role-row"><span class="role-label">Outputs</span><span class="role-value">One clean ticket brief — issue summary, guided steps, related ticket links.</span></div>
+    <div class="role-row"><span class="role-label">Measurements</span><span class="role-value">Agent-reported time saved per ticket, reduction in escalations due to missing context.</span></div>
+  </div>
+
+  <div class="ai-role">
+    <h3>✅ AI QA Agent — alongside Kyle</h3>
+    <div class="role-row"><span class="role-label">Purpose</span><span class="role-value">Automatically review all tickets and surface those needing Kyle's attention — so he focuses on the most critical ones.</span></div>
+    <div class="role-row"><span class="role-label">Responsibilities</span><span class="role-value">Check tone, accuracy, SOP compliance, and completeness of every reply. Score each ticket. Flag priority issues.</span></div>
+    <div class="role-row"><span class="role-label">Boundaries</span><span class="role-value">Flags and scores only — Kyle makes all final decisions on quality and feedback.</span></div>
+    <div class="role-row"><span class="role-label">Inputs</span><span class="role-value">All sent ticket replies, QA scorecard criteria, SOP library.</span></div>
+    <div class="role-row"><span class="role-label">Outputs</span><span class="role-value">Auto-scored ticket list, priority flag list for Kyle, weekly quality summary.</span></div>
+    <div class="role-row"><span class="role-label">Measurements</span><span class="role-value">QA coverage rate, flag accuracy, time saved per week for Kyle.</span></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 6: METRICS -->
+<section>
+  <div class="section-label">06 · Metrics</div>
+  <h2>Leading & Lagging Indicators</h2>
+  <p>Specific targets measured against the July 2026 baseline.</p>
+  <table class="metrics-table">
+    <thead><tr><th>Metric</th><th>July Baseline</th><th>Pilot Target</th></tr></thead>
+    <tbody>
+      <tr><td>FRT (First Reply Time)</td><td>166 hrs</td><td class="target">Under 48 hrs</td></tr>
+      <tr><td>Resolution Time</td><td>303 hrs</td><td class="target">Under 150 hrs</td></tr>
+      <tr><td>CSAT Score</td><td>79%</td><td class="target">85%+</td></tr>
+      <tr><td>DSATs from Delayed Response</td><td>6 out of 12</td><td class="target">Under 2</td></tr>
+      <tr><td>SLA %</td><td>26%</td><td class="target">50%+</td></tr>
+      <tr><td>T2 Transfer Rate</td><td>18%</td><td class="target">Under 12%</td></tr>
+      <tr><td>QA Coverage</td><td>70 manual audits</td><td class="target">100% auto-reviewed</td></tr>
+      <tr><td>Agent Follow-up Tracking</td><td>Manual memory checks</td><td class="target">Zero manual tracking</td></tr>
+    </tbody>
+  </table>
+</section>
+<hr class="divider">
+
+<!-- SECTION 7: TIMELINE -->
+<section>
+  <div class="section-label">07 · Timeline</div>
+  <h2>8-Week Pilot Plan</h2>
+  <div class="timeline">
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 1</div><div class="week" style="font-size:12px;color:#8A9BB5">Aug 4–8</div><div class="phase">Baseline</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>July baseline documented. Agent interviews completed — Kyle + Jacob done. AI Role proposals finalized.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 2</div><div class="week" style="font-size:12px;color:#8A9BB5">Aug 11–15</div><div class="phase">Build</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>Build Auto Follow-up Agent. Build Ticket Brief Agent. Both Zendesk-native — fast to deploy.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 3</div><div class="week" style="font-size:12px;color:#8A9BB5">Aug 18–22</div><div class="phase">Deploy</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>Deploy both agents with Virtuous team. Monitor daily — FRT, follow-up rate, agent feedback.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 4</div><div class="week" style="font-size:12px;color:#8A9BB5">Aug 25–29</div><div class="phase">QA Build</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>Build AI QA Agent. Begin auto-reviewing tickets. Kyle validates flag accuracy.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 5–6</div><div class="week" style="font-size:12px;color:#8A9BB5">Sep 1–12</div><div class="phase">Pilot Run</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>All 3 AI agents live. Track leading indicators daily. Gather agent feedback weekly.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 7</div><div class="week" style="font-size:12px;color:#8A9BB5">Sep 15–19</div><div class="phase">Measure</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>Compare August metrics against July baseline. Document impact per AI agent.</p></div></div>
+    <div class="timeline-item"><div class="tl-left"><div class="week">Week 8</div><div class="week" style="font-size:12px;color:#8A9BB5">Sep 22–26</div><div class="phase">Report</div></div><div class="tl-line"><div class="tl-dot"></div><div class="tl-track"></div></div><div class="tl-right"><p>Present pilot results to Piyush Sir. Build playbook for rolling out to other Equinox teams.</p></div></div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- SECTION 8: NEXT STEPS -->
+<section>
+  <div class="section-label">08 · Next Steps</div>
+  <h2>Immediate Actions</h2>
+  <ul class="steps-list">
+    <li><span class="step-num">1</span>Piyush Sir reviews and approves this document — confirm AI roles and metrics</li>
+    <li><span class="step-num">2</span>Samuel begins building Auto Follow-up Agent in Zendesk — Week 2</li>
+    <li><span class="step-num">3</span>Samuel builds Ticket Brief Agent — merge chatbot + Corey summary — Week 2</li>
+    <li><span class="step-num">4</span>Samuel presents QA Agent design to Kyle before build — Week 3</li>
+    <li><span class="step-num">5</span>First metrics review against July baseline — end of Week 3</li>
+  </ul>
+</section>
+<hr class="divider">
+
+<!-- SECTION 9: PROOF OF CONCEPT -->
+<section>
+  <div class="section-label">09 · Proof of Concept</div>
+  <h2>AI Follow-up Agent — Working Demo</h2>
+  <p>Before approaching the client, a working proof of concept of the AI Follow-up Agent was built and tested on demo accounts. This confirms the technical feasibility of the solution.</p>
+
+  <div class="agent-card">
+    <h3>✅ What Was Built & Tested</h3>
+    <div class="pain-point">
+      <h4>1. Zendesk API Connection</h4>
+      <p>Connected to a Zendesk trial account via OAuth 2.0 — authenticated and fetching live ticket data using Python.</p>
+    </div>
+    <div class="pain-point">
+      <h4>2. 48-Hour No-Response Detection</h4>
+      <p>Python script reads all pending tickets, calculates hours since last customer response, and flags any ticket exceeding the threshold.</p>
+    </div>
+    <div class="pain-point">
+      <h4>3. Slack Notification — Live & Working</h4>
+      <p>When a ticket exceeds the threshold, an automatic Slack notification is sent to the agent channel — showing ticket ID, subject, and hours waiting. Tested successfully on equinox-test Slack workspace.</p>
+    </div>
+  </div>
+
+  <div class="finding-box" style="margin-top:20px; border-color:rgba(74,222,128,0.3); background:rgba(74,222,128,0.05);">
+    <p><strong style="color:#4ADE80">Tech Stack Used:</strong> Python, Zendesk OAuth 2.0 API, Slack Incoming Webhooks — all on demo accounts. No client data was used or accessed.</p>
+  </div>
+
+  <div style="margin-top:20px;">
+    <p style="color:#8A9BB5; font-size:13px; font-style:italic;">Note: This proof of concept was built on demo accounts. Production deployment will require write access credentials from Virtuous — which will be discussed with the client separately.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<footer>
+  <p><strong>Project RISE — Virtuous Pilot</strong> · Equinox Agents · August 2026</p>
+  <p style="margin-top:8px">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
+  <p style="margin-top:16px;font-style:italic;color:#4A6080">"The employee's role shifts from searching for answers to actively solving problems."</p>
+</footer>
+</body>
+</html>
