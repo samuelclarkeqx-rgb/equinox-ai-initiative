@@ -337,45 +337,46 @@
   <h2>KRAs — Brian & AI Partner</h2>
   <p>KRAs define what success looks like for both Brian and his AI partner. Human KRAs focus on ticket outcomes and quality. AI Agent KRAs focus on accuracy, speed, and adoption.</p>
 
-  <h3 style="color:#3D8EF0; font-size:16px; margin-top:32px; margin-bottom:16px;">👤 Brian — Human KRAs</h3>
+  <h3 style="color:#3D8EF0; font-size:16px; margin-top:32px; margin-bottom:16px;">👤 Vaibhav (Brian) — Human KRAs</h3>
+  <p style="font-size:13px; color:#8A9BB5; margin-bottom:16px;">All targets sourced directly from the Equinox Agents Operations Dashboard — July & August 2026.</p>
   <table class="summary-table">
     <thead>
       <tr>
         <th>KRA Area</th>
         <th>Key Result</th>
         <th>Target</th>
+        <th>Source</th>
         <th>Measurement</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>Ticket Resolution</td><td>First response time on assigned tickets</td><td>Under 4 hours</td><td>Salesforce FRT report</td></tr>
-      <tr><td>Ticket Quality</td><td>QA score on reviewed responses</td><td>95%+</td><td>Monthly QA audit scores</td></tr>
-      <tr><td>SLA Compliance</td><td>Tickets resolved within SLA</td><td>85%+</td><td>Salesforce SLA dashboard</td></tr>
-      <tr><td>Knowledge Creation</td><td>Knowledge articles published per month</td><td>4+ articles</td><td>Knowledge base article count</td></tr>
-      <tr><td>T2 Escalation Rate</td><td>Unnecessary T2 escalations</td><td>Under 10%</td><td>T2 transfer report — AI flagged vs actual</td></tr>
-      <tr><td>CSAT</td><td>Customer satisfaction score on handled tickets</td><td>90%+</td><td>Post-ticket CSAT surveys</td></tr>
-      <tr><td>Queue Clearance</td><td>Tickets actioned per day</td><td>20+ tickets/day</td><td>Salesforce daily activity report</td></tr>
+      <tr><td>First Response Time</td><td>FRT on assigned tickets across all Board LOBs</td><td>Under 20 minutes</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
+      <tr><td>Total Resolution Time</td><td>Full ticket resolution time</td><td>Under 10 days</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
+      <tr><td>Ticket Quality Score</td><td>QA score on reviewed responses</td><td>95%+ (Cloud & Product) / 100% (Premium)</td><td>Robert's QA Scorecard + Ops Dashboard</td><td>QA Audit Scores</td></tr>
+      <tr><td>Service Level</td><td>HC-based service level maintained</td><td>95%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
+      <tr><td>Utilization</td><td>Agent utilization across all task types</td><td>75%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
+      <tr><td>Shrinkage</td><td>Team shrinkage kept within target</td><td>Under 10%</td><td>Ops Dashboard — Board Overall</td><td>Board Shrinkage Report</td></tr>
     </tbody>
   </table>
 
   <h3 style="color:var(--cyan); font-size:16px; margin-top:40px; margin-bottom:16px;">🤖 AI Agent — KRAs</h3>
+  <p style="font-size:13px; color:#8A9BB5; margin-bottom:16px;">AI Agent KRAs are tied directly to the human KRAs above — measuring how much AI contribution improves each metric.</p>
   <table class="summary-table">
     <thead>
       <tr>
         <th>KRA Area</th>
         <th>Key Result</th>
-        <th>Target</th>
+        <th>How AI Contributes</th>
         <th>Measurement</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>Troubleshooting Accuracy</td><td>AI suggested steps that led to resolution</td><td>80%+ accuracy</td><td>Brian validates after ticket close</td></tr>
-      <tr><td>Knowledge Draft Quality</td><td>AI knowledge article drafts accepted with minimal edits</td><td>75%+ accepted as-is or minor edits</td><td>Edit frequency tracking</td></tr>
-      <tr><td>SFDC Alert Accuracy</td><td>Customer alerts triggered correctly vs false alerts</td><td>90%+ accuracy</td><td>Alert validation by Brian per ticket</td></tr>
-      <tr><td>Queue Prioritization Accuracy</td><td>AI priority ranking matched Brian's own assessment</td><td>85%+ match rate</td><td>Weekly spot-check review</td></tr>
-      <tr><td>Incident Alert Filtering</td><td>Critical PagerDuty alerts correctly surfaced vs noise filtered</td><td>95%+ relevant alerts only</td><td>Alert action tracking</td></tr>
-      <tr><td>Adoption</td><td>AI suggestions acted upon by Brian</td><td>75%+ acceptance rate</td><td>Action taken vs suggestion count</td></tr>
-      <tr><td>Time Saved</td><td>Hours saved per day vs baseline</td><td>2–3 hrs/day target</td><td>Time tracking before vs after</td></tr>
+      <tr><td>FRT Improvement</td><td>Reduction in FRT after AI implementation vs baseline</td><td>AI surfaces relevant info instantly — reduces research time per ticket</td><td>FRT before vs after on Board KPI Dashboard</td></tr>
+      <tr><td>Quality Score Maintenance</td><td>QA scores maintained at target while ticket volume increases</td><td>AI pre-checks responses — flags issues before submission</td><td>QA Audit Scores monthly</td></tr>
+      <tr><td>Triage Accuracy</td><td>Correct Premium vs non-Premium identification on ticket open</td><td>AI screen reader flags Premium customers automatically — eliminates manual Google Sheet check</td><td>Triage % on Board KPI Dashboard vs manual error rate</td></tr>
+      <tr><td>Time Saved — Measurable Tasks</td><td>Reduction in time spent on measurable tasks vs baseline</td><td>Vaibhav's actual baseline: 4 hrs/day QA + 2.5 hrs/day troubleshooting + 45 min/day SFDC checks</td><td>Time tracking before vs after — Vaibhav self-reported</td></tr>
+      <tr><td>Alert Coverage</td><td>Critical PagerDuty alerts reach entire team — not just one agent</td><td>AI sends Slack notifications team-wide for critical infrastructure alerts</td><td>Response time to critical alerts, team coverage rate</td></tr>
+      <tr><td>Knowledge Article Output</td><td>Increase in articles published per month at same or less effort</td><td>AI drafts article from resolved ticket — Vaibhav reviews only</td><td>Articles published per month before vs after</td></tr>
     </tbody>
   </table>
 </section>
