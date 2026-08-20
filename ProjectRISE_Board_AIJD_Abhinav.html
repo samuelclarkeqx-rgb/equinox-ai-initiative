@@ -5,324 +5,286 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project RISE — Board AIJD — Abhinav</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-  :root {
-    --navy: #0B1F3A; --blue: #1E6FD9; --blue-light: #3D8EF0;
-    --cyan: #00C2E0; --white: #FFFFFF; --off-white: #EDF2F8; --gray: #8A9BB5;
-    --card-bg: rgba(255,255,255,0.04); --border: rgba(255,255,255,0.08);
-    --red: #FF4D4D; --green: #4ADE80; --yellow: #FBBF24; --purple: #A78BFA;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--navy); color:var(--white); font-family:'Inter',sans-serif; line-height:1.7; }
+  body { background:#F8FAFC; color:#0F172A; font-family:'Inter',sans-serif; line-height:1.7; }
 
-  .hero {
-    min-height:60vh; display:flex; flex-direction:column; justify-content:center;
-    align-items:center; text-align:center; padding:60px 40px;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30,111,217,0.25) 0%, transparent 70%), var(--navy);
-    position:relative; overflow:hidden;
-  }
-  .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px); background-size:40px 40px; }
-  .hero-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,194,224,0.1); border:1px solid rgba(0,194,224,0.3); color:var(--cyan); padding:6px 16px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:32px; }
-  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(32px,5vw,64px); font-weight:700; letter-spacing:-2px; line-height:1.0; margin-bottom:12px; }
-  .hero h1 .accent { color:var(--cyan); }
-  .hero-sub { font-size:clamp(14px,2vw,18px); color:var(--gray); max-width:600px; margin:0 auto 12px; }
-  .hero-tagline { font-size:13px; color:var(--cyan); font-style:italic; margin-bottom:40px; }
-  .hero-meta { display:flex; gap:40px; justify-content:center; flex-wrap:wrap; }
-  .hero-meta-item .label { font-size:11px; color:var(--gray); text-transform:uppercase; letter-spacing:1px; }
-  .hero-meta-item .value { font-size:14px; font-weight:600; color:var(--off-white); margin-top:2px; }
+  .hero { background:#1E3A5F; padding:48px 40px; }
+  .hero-badge { display:inline-block; background:rgba(126,179,232,0.15); border:1px solid rgba(126,179,232,0.3); color:#7EB3E8; padding:5px 14px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:20px; }
+  .hero h1 { font-size:clamp(28px,4vw,48px); font-weight:600; color:#FFFFFF; margin-bottom:8px; letter-spacing:-0.5px; }
+  .hero h1 span { color:#7EB3E8; }
+  .hero-sub { font-size:15px; color:#A8C8E8; margin-bottom:24px; }
+  .hero-meta { display:flex; gap:32px; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:11px; color:#7EB3E8; text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:13px; font-weight:600; color:#F1F5F9; margin-top:2px; }
 
-  section { max-width:960px; margin:0 auto; padding:60px 40px; }
-  .section-label { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
-  h2 { font-family:'Space Grotesk',sans-serif; font-size:clamp(20px,3vw,30px); font-weight:700; color:var(--white); margin-bottom:16px; letter-spacing:-0.5px; }
-  p { color:#B0BDD0; font-size:15px; margin-bottom:14px; }
-  .divider { border:none; border-top:1px solid var(--border); margin:0; }
+  section { max-width:960px; margin:0 auto; padding:48px 40px; }
+  .section-label { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#1E6FD9; margin-bottom:8px; }
+  h2 { font-size:clamp(18px,2.5vw,26px); font-weight:600; color:#0F172A; margin-bottom:14px; }
+  h3 { font-size:16px; font-weight:600; margin-bottom:12px; }
+  p { color:#475569; font-size:14px; margin-bottom:12px; }
+  .divider { border:none; border-top:1px solid #E2E8F0; margin:0; }
 
-  /* LEGEND */
-  .legend { display:flex; gap:24px; flex-wrap:wrap; margin-bottom:32px; }
-  .legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--gray); }
-  .legend-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
-  .dot-human { background:#3D8EF0; }
-  .dot-ai { background:#00C2E0; }
-  .dot-shared { background:#A78BFA; }
-
-  /* JD SECTION CARDS */
-  .jd-section { margin-bottom:40px; }
-  .jd-section-title { font-size:14px; font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:16px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .legend { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:28px; }
+  .legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:#475569; }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .dot-human { background:#1E3A5F; }
+  .dot-ai { background:#0D9E75; }
 
   .jd-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .jd-human { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #1E3A5F; border-radius:8px; padding:16px 20px; }
+  .jd-ai { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #0D9E75; border-radius:8px; padding:16px 20px; }
+  .jd-human-only { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #1E3A5F; border-radius:8px; padding:16px 20px; grid-column:1; }
+  .jd-ai-only { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #0D9E75; border-radius:8px; padding:16px 20px; grid-column:2; }
 
-  .jd-human { background:rgba(61,142,240,0.06); border:1px solid rgba(61,142,240,0.2); border-left:3px solid #3D8EF0; border-radius:10px; padding:16px 20px; }
-  .jd-ai { background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.2); border-left:3px solid var(--cyan); border-radius:10px; padding:16px 20px; }
-  .jd-human-only { background:rgba(61,142,240,0.06); border:1px solid rgba(61,142,240,0.2); border-left:3px solid #3D8EF0; border-radius:10px; padding:16px 20px; grid-column:1; }
-  .jd-ai-only { background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.2); border-left:3px solid var(--cyan); border-radius:10px; padding:16px 20px; grid-column:2; }
+  .role-tag { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+  .human-tag { color:#1E3A5F; }
+  .ai-tag { color:#0D9E75; }
+  .card-title { font-size:13px; font-weight:600; color:#0F172A; margin-bottom:5px; }
+  .card-desc { font-size:12px; color:#64748B; line-height:1.6; }
+  .handoff-note { background:#F5F3FF; border:0.5px solid #C4B5FD; border-radius:6px; padding:8px 14px; margin-top:8px; font-size:12px; color:#6D28D9; }
 
-  .role-tag { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
-  .human-tag { color:#3D8EF0; }
-  .ai-tag { color:var(--cyan); }
-  .card-title { font-size:14px; font-weight:600; color:var(--white); margin-bottom:6px; }
-  .card-desc { font-size:13px; color:#8A9BB5; line-height:1.6; }
-
-  .handoff-note { background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); border-radius:8px; padding:10px 16px; margin-top:8px; font-size:12px; color:#A78BFA; }
-
-  /* SUMMARY TABLE */
-  .summary-table { width:100%; border-collapse:collapse; margin-top:20px; font-size:13px; }
-  .summary-table th { background:rgba(30,111,217,0.3); color:var(--cyan); font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:12px 16px; text-align:left; border-bottom:1px solid var(--border); }
-  .summary-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:#B0BDD0; vertical-align:top; }
-  .summary-table tr:last-child td { border-bottom:none; }
-  .summary-table td:first-child { color:var(--white); font-weight:500; }
-  .summary-table tr:nth-child(odd) td { background:rgba(255,255,255,0.02); }
+  .data-table { width:100%; border-collapse:collapse; margin-top:16px; font-size:13px; }
+  .data-table th { background:#1E3A5F; color:#FFFFFF; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:11px 16px; text-align:left; }
+  .data-table td { padding:11px 16px; border-bottom:0.5px solid #E2E8F0; color:#475569; vertical-align:top; }
+  .data-table tr:last-child td { border-bottom:none; }
+  .data-table td:first-child { color:#0F172A; font-weight:500; }
+  .data-table tr:nth-child(even) td { background:#F8FAFC; }
 
   .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:600; }
-  .tag-ai { background:rgba(0,194,224,0.1); color:var(--cyan); border:1px solid rgba(0,194,224,0.3); }
-  .tag-human { background:rgba(61,142,240,0.1); color:#3D8EF0; border:1px solid rgba(61,142,240,0.3); }
-  .tag-shared { background:rgba(167,139,250,0.1); color:#A78BFA; border:1px solid rgba(167,139,250,0.3); }
+  .tag-shared { background:#EFF6FF; color:#1D4ED8; border:0.5px solid #BFDBFE; }
+  .tag-human { background:#F8FAFC; color:#475569; border:0.5px solid #E2E8F0; }
 
-  footer { text-align:center; padding:40px; border-top:1px solid var(--border); color:var(--gray); font-size:13px; }
-  footer strong { color:var(--white); }
+  .summary-box { background:#EBF3FB; border:0.5px solid #BFDBFE; border-left:3px solid #1E6FD9; border-radius:8px; padding:20px 24px; margin-top:20px; }
+  .summary-box p { color:#1E3A5F; margin:0; font-size:14px; }
+
+  footer { text-align:center; padding:40px; border-top:1px solid #E2E8F0; background:#FFFFFF; color:#94A3B8; font-size:13px; }
+  footer strong { color:#1E3A5F; }
 
   @media(max-width:600px) {
-    section { padding:40px 20px; }
+    section { padding:32px 20px; }
     .jd-row { grid-template-columns:1fr; }
     .jd-ai-only { grid-column:1; }
-    .legend { gap:12px; }
+    .hero { padding:32px 20px; }
+    .hero-meta { gap:16px; }
   }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><span>🤖</span> Project RISE · Board · AIJD</div>
-  <h1>Abhinav + <span class="accent">AI Partner</span></h1>
+  <div class="hero-badge">Project RISE · Board · AIJD</div>
+  <h1>Abhinav + <span>AI Partner</span></h1>
   <p class="hero-sub">Human Job Description alongside AI Job Description — Board Process Owner</p>
-  <p class="hero-tagline">"AI handles the repetitive. Abhinav focuses on what only a human can do."</p>
   <div class="hero-meta">
     <div class="hero-meta-item"><div class="label">Role</div><div class="value">Process Owner — Board</div></div>
-    <div class="hero-meta-item"><div class="label">AI Tasks</div><div class="value">9 Identified</div></div>
-    <div class="hero-meta-item"><div class="label">Human Tasks</div><div class="value">Remains with Abhinav</div></div>
+    <div class="hero-meta-item"><div class="label">Submitted to</div><div class="value">Piyush Parikh & Ashwin</div></div>
     <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Prepared by</div><div class="value">Samuel</div></div>
   </div>
 </div>
 <hr class="divider">
 
-<!-- LEGEND -->
+<!-- HOW TO READ -->
 <section>
-  <div class="section-label">How to Read This Document</div>
+  <div class="section-label">How to read this document</div>
   <h2>Human JD + AI JD — Side by Side</h2>
-  <p>Each responsibility from Abhinav's JD is shown alongside what an AI partner will do for that same responsibility. Some tasks stay entirely with Abhinav — others are taken over by AI with Abhinav reviewing.</p>
+  <p>Each responsibility from Abhinav's JD is shown alongside what an AI partner will handle. Some tasks stay entirely with Abhinav — others are supported by AI with Abhinav reviewing and deciding.</p>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot dot-human"></div>Human — Abhinav owns this</div>
-    <div class="legend-item"><div class="legend-dot dot-ai"></div>AI — AI partner handles this</div>
-    <div class="legend-item"><div class="legend-dot dot-shared"></div>Human-in-the-Loop — AI does, Abhinav approves</div>
+    <div class="legend-item"><div class="legend-dot dot-ai"></div>AI Partner handles this</div>
   </div>
 </section>
 <hr class="divider">
 
-<!-- SECTION 1: DAILY OPERATIONS -->
+<!-- SECTION 1: DAILY OPS -->
 <section>
   <div class="section-label">01 · Daily Operations & Workforce Management</div>
   <h2>Daily Operations</h2>
 
-  <div class="jd-section">
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Attendance & HC Management</div>
-        <div class="card-desc">Monitor daily attendance and ensure required headcount is maintained to meet support coverage expectations.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Auto Attendance Dashboard</div>
-        <div class="card-desc">Automatically pulls attendance data, flags absences, calculates real-time headcount vs required coverage, and alerts Abhinav when HC falls below threshold.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews alerts and takes action on coverage gaps.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Attendance & HC Management</div>
+      <div class="card-desc">Monitor daily attendance and ensure required headcount is maintained to meet support coverage expectations.</div>
     </div>
-
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Shrinkage Management</div>
-        <div class="card-desc">Track and update shrinkage for absences and adjust coverage plans accordingly.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Auto Shrinkage Tracker</div>
-        <div class="card-desc">Automatically calculates shrinkage percentages, updates records in real time, and generates daily shrinkage reports with trend analysis.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews report and adjusts coverage plan.</div>
-      </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Auto Attendance Dashboard</div>
+      <div class="card-desc">Automatically pulls attendance data, flags absences, calculates real-time headcount vs required coverage, alerts Abhinav when HC falls below threshold.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews alerts and takes action on coverage gaps.</div>
     </div>
+  </div>
 
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Ticket Quality Review</div>
-        <div class="card-desc">Review agent responses before submission to ensure accuracy, quality, and appropriate customer communication.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">AI Pre-Submission QA Check</div>
-        <div class="card-desc">Automatically reviews every agent response before submission — checks tone, accuracy, completeness, and flags issues with suggested corrections. Surfaces only flagged tickets to Abhinav.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews AI-flagged tickets only — clean tickets pass automatically.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Shrinkage Management</div>
+      <div class="card-desc">Track and update shrinkage for absences and adjust coverage plans accordingly.</div>
     </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Auto Shrinkage Tracker</div>
+      <div class="card-desc">Automatically calculates shrinkage percentages, updates records in real time, and generates daily shrinkage reports with trend analysis.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews report and adjusts coverage plan.</div>
+    </div>
+  </div>
 
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Support Queue Management</div>
-        <div class="card-desc">Actively handle support tickets when required to maintain queue health.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Queue Health Monitor</div>
-        <div class="card-desc">Continuously monitors queue volume, aging tickets, and SLA risk. Alerts Abhinav when queue health drops and identifies which tickets need immediate attention.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav decides whether to handle personally or reassign.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Ticket Quality Review</div>
+      <div class="card-desc">Review agent responses before submission to ensure accuracy, quality, and appropriate customer communication.</div>
+    </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">AI Pre-Submission QA Check</div>
+      <div class="card-desc">Automatically reviews every agent response before submission — checks tone, accuracy, completeness, flags issues with suggested corrections. Surfaces only flagged tickets to Abhinav.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews AI-flagged tickets only — clean tickets pass automatically.</div>
+    </div>
+  </div>
+
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Support Queue Management</div>
+      <div class="card-desc">Actively handle support tickets when required to maintain queue health.</div>
+    </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Queue Health Monitor</div>
+      <div class="card-desc">Continuously monitors queue volume, aging tickets, and SLA risk. Alerts Abhinav when queue health drops and identifies which tickets need immediate attention.</div>
+      <div class="handoff-note">Handoff: Abhinav decides whether to handle personally or reassign.</div>
     </div>
   </div>
 </section>
 <hr class="divider">
 
-<!-- SECTION 2: TECHNICAL & KNOWLEDGE -->
+<!-- SECTION 2: KNOWLEDGE -->
 <section>
   <div class="section-label">02 · Technical Support & Knowledge Management</div>
   <h2>Knowledge Management</h2>
 
-  <div class="jd-section">
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">KCS Article Creation</div>
-        <div class="card-desc">Convert weekly session recordings and ticket resolutions into help articles and maintain them in SharePoint.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Auto KCS Article Generator</div>
-        <div class="card-desc">Automatically transcribes session recordings, extracts key resolutions, and generates a structured KCS article draft ready for Abhinav to review and publish.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews draft, makes edits, approves for SharePoint.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">KCS Article Creation</div>
+      <div class="card-desc">Convert weekly session recordings and ticket resolutions into help articles and maintain them in SharePoint.</div>
     </div>
-
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Ticket Troubleshooting & Coaching</div>
-        <div class="card-desc">Collaborate with agents on complex tickets and document troubleshooting discussions through the ride-along repository.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">AI Troubleshooting Suggester</div>
-        <div class="card-desc">For complex tickets, AI searches historical cases and knowledge base to suggest relevant troubleshooting steps — giving Abhinav a starting point before the coaching session begins.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews suggestions, adds expertise, coaches agent.</div>
-      </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Auto KCS Article Generator</div>
+      <div class="card-desc">Automatically transcribes session recordings, extracts key resolutions, and generates a structured KCS article draft ready for Abhinav to review and publish.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews draft, makes edits, approves for SharePoint.</div>
     </div>
+  </div>
 
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">Weekly Knowledge Sessions</div>
-        <div class="card-desc">Conduct weekly team syncs to strengthen product knowledge and address recurring challenges.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Session Prep & Summary Agent</div>
-        <div class="card-desc">Before each session: AI identifies top recurring issues from the week's tickets to inform the agenda. After each session: AI auto-generates a summary and distributes it to the team.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav conducts the session — AI handles prep and post-session documentation.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Ticket Troubleshooting & Coaching</div>
+      <div class="card-desc">Collaborate with agents on complex tickets and document troubleshooting discussions.</div>
+    </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">AI Troubleshooting Suggester</div>
+      <div class="card-desc">For complex tickets, AI searches historical cases and knowledge base to suggest relevant troubleshooting steps — giving Abhinav a starting point before the coaching session begins.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews suggestions, adds expertise, coaches agent.</div>
+    </div>
+  </div>
+
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">Weekly Knowledge Sessions</div>
+      <div class="card-desc">Conduct weekly team syncs to strengthen product knowledge and address recurring challenges.</div>
+    </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Session Prep & Summary Agent</div>
+      <div class="card-desc">Before each session: AI identifies top recurring issues from the week's tickets to inform the agenda. After each session: AI auto-generates a summary and distributes it to the team.</div>
+      <div class="handoff-note">Handoff: Abhinav conducts the session — AI handles prep and post-session documentation.</div>
     </div>
   </div>
 </section>
 <hr class="divider">
 
-<!-- SECTION 3: PERFORMANCE & REPORTING -->
+<!-- SECTION 3: REPORTING -->
 <section>
   <div class="section-label">03 · Performance & Business Reporting</div>
   <h2>Reporting & KPIs</h2>
 
-  <div class="jd-section">
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">KPI & Performance Tracking</div>
-        <div class="card-desc">Monitor team KPIs, operational metrics, and individual performance against defined expectations.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Auto KPI Dashboard</div>
-        <div class="card-desc">Automatically aggregates ticket data, calculates all KPIs in real time, tracks individual agent performance trends, and flags anyone falling below expectations.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav reviews dashboard, interprets trends, takes action.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">KPI & Performance Tracking</div>
+      <div class="card-desc">Monitor team KPIs, operational metrics, and individual performance against defined expectations.</div>
     </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Auto KPI Dashboard</div>
+      <div class="card-desc">Automatically aggregates ticket data, calculates all KPIs in real time, tracks individual agent performance trends, and flags anyone falling below expectations.</div>
+      <div class="handoff-note">Handoff: Abhinav reviews dashboard, interprets trends, takes action.</div>
+    </div>
+  </div>
 
-    <div class="jd-row">
-      <div class="jd-human">
-        <div class="role-tag human-tag">👤 Human — Abhinav</div>
-        <div class="card-title">QBR Insights & Leadership Updates</div>
-        <div class="card-desc">Prepare data points, performance insights, and operational trends for quarterly business reviews and leadership presentations.</div>
-      </div>
-      <div class="jd-ai">
-        <div class="role-tag ai-tag">🤖 AI Partner</div>
-        <div class="card-title">Auto Report Generator</div>
-        <div class="card-desc">Automatically compiles performance data, calculates trends, identifies highlights and areas of concern, and generates a structured QBR report draft ready for Abhinav to present.</div>
-        <div class="handoff-note">⚡ Handoff: Abhinav adds context, narrative, and delivers to leadership.</div>
-      </div>
+  <div class="jd-row">
+    <div class="jd-human">
+      <div class="role-tag human-tag">Human — Abhinav</div>
+      <div class="card-title">QBR Insights & Leadership Updates</div>
+      <div class="card-desc">Prepare data points, performance insights, and operational trends for quarterly business reviews and leadership presentations.</div>
+    </div>
+    <div class="jd-ai">
+      <div class="role-tag ai-tag">AI Partner</div>
+      <div class="card-title">Auto Report Generator</div>
+      <div class="card-desc">Automatically compiles performance data, calculates trends, identifies highlights and areas of concern, and generates a structured QBR report draft ready for Abhinav to present.</div>
+      <div class="handoff-note">Handoff: Abhinav adds context, narrative, and delivers to leadership.</div>
     </div>
   </div>
 </section>
 <hr class="divider">
 
-<!-- SECTION 4: PURELY HUMAN -->
+<!-- SECTION 4: HUMAN ONLY -->
 <section>
-  <div class="section-label">04 · Human Only — No AI</div>
+  <div class="section-label">04 · Human Only</div>
   <h2>What Stays With Abhinav</h2>
-  <p>These responsibilities require human judgment, relationship management, or contextual expertise — AI does not replace these.</p>
-
-  <div class="jd-section">
-    <div class="jd-row">
-      <div class="jd-human-only">
-        <div class="role-tag human-tag">👤 Human Only</div>
-        <div class="card-title">Candidate Interviews & Assessment</div>
-        <div class="card-desc">Conducting personal and technical interviews for Board candidates, L2 assessments, and evaluating candidate readiness requires human judgment and relationship skills.</div>
-      </div>
-      <div class="jd-ai-only">
-        <div class="role-tag human-tag">👤 Human Only</div>
-        <div class="card-title">Stakeholder & Partner Management</div>
-        <div class="card-desc">Maintaining alignment with directors, Partner Success leadership, Academy team, and Premium Support — these relationships require human communication and trust-building.</div>
-      </div>
+  <p>These responsibilities require human judgment, relationships, and leadership — AI does not replace these.</p>
+  <div class="jd-row">
+    <div class="jd-human-only">
+      <div class="role-tag human-tag">Human Only</div>
+      <div class="card-title">Candidate Interviews & Assessment</div>
+      <div class="card-desc">Conducting personal and technical interviews for Board candidates and evaluating readiness requires human judgment.</div>
     </div>
-    <div class="jd-row">
-      <div class="jd-human-only">
-        <div class="role-tag human-tag">👤 Human Only</div>
-        <div class="card-title">Team Huddles & Coaching</div>
-        <div class="card-desc">Conducting team huddles, coaching agents on complex situations, and providing motivational leadership cannot be automated — human presence and empathy are essential.</div>
-      </div>
-      <div class="jd-ai-only">
-        <div class="role-tag human-tag">👤 Human Only</div>
-        <div class="card-title">L2 Hiring Coordination</div>
-        <div class="card-desc">Working closely with Premium Support leadership to identify and progress L2 candidates requires strategic judgment and interpersonal coordination that must remain with Abhinav.</div>
-      </div>
+    <div class="jd-ai-only">
+      <div class="role-tag human-tag">Human Only</div>
+      <div class="card-title">Stakeholder & Partner Management</div>
+      <div class="card-desc">Maintaining alignment with directors, Partner Success leadership, Academy and Premium Support requires human trust and communication.</div>
+    </div>
+  </div>
+  <div class="jd-row">
+    <div class="jd-human-only">
+      <div class="role-tag human-tag">Human Only</div>
+      <div class="card-title">Team Huddles & Coaching</div>
+      <div class="card-desc">Conducting team huddles and coaching agents on complex situations requires human presence and empathy.</div>
+    </div>
+    <div class="jd-ai-only">
+      <div class="role-tag human-tag">Human Only</div>
+      <div class="card-title">L2 Hiring Coordination</div>
+      <div class="card-desc">Working with Premium Support leadership to identify and progress L2 candidates requires strategic judgment and interpersonal coordination.</div>
     </div>
   </div>
 </section>
 <hr class="divider">
 
-<!-- SECTION 5: SUMMARY TABLE -->
+<!-- SECTION 5: SUMMARY -->
 <section>
   <div class="section-label">05 · Summary</div>
   <h2>Abhinav + AI — At a Glance</h2>
-
-  <table class="summary-table">
-    <thead>
-      <tr>
-        <th>Responsibility</th>
-        <th>Human Role</th>
-        <th>AI Role</th>
-        <th>Ownership</th>
-      </tr>
-    </thead>
+  <table class="data-table">
+    <thead><tr><th>Responsibility</th><th>Human Role</th><th>AI Role</th><th>Ownership</th></tr></thead>
     <tbody>
-      <tr><td>Attendance & HC Management</td><td>Review alerts, act on gaps</td><td>Auto-pulls data, flags shortfalls</td><td><span class="tag tag-shared">Shared</span></td></tr>
-      <tr><td>Shrinkage Management</td><td>Review report, adjust plan</td><td>Auto-calculates, tracks trends</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Attendance & HC Management</td><td>Reviews alerts, acts on gaps</td><td>Auto-pulls data, flags shortfalls</td><td><span class="tag tag-shared">Shared</span></td></tr>
+      <tr><td>Shrinkage Management</td><td>Reviews report, adjusts plan</td><td>Auto-calculates, tracks trends</td><td><span class="tag tag-shared">Shared</span></td></tr>
       <tr><td>Ticket Quality Review</td><td>Reviews flagged tickets only</td><td>Pre-screens all tickets, flags issues</td><td><span class="tag tag-shared">Shared</span></td></tr>
       <tr><td>Queue Management</td><td>Decides action on alerts</td><td>Monitors queue, surfaces at-risk tickets</td><td><span class="tag tag-shared">Shared</span></td></tr>
       <tr><td>KCS Article Creation</td><td>Reviews, edits, approves draft</td><td>Auto-generates article from recordings</td><td><span class="tag tag-shared">Shared</span></td></tr>
@@ -339,109 +301,107 @@
 </section>
 <hr class="divider">
 
-<hr class="divider">
-
 <!-- SECTION 6: KRAs -->
 <section>
   <div class="section-label">06 · Key Result Areas</div>
   <h2>KRAs — Abhinav & AI Partner</h2>
-  <p>KRAs define what success looks like for both Abhinav and his AI partner. Human KRAs focus on outcomes and leadership. AI Agent KRAs focus on accuracy, speed, and adoption.</p>
+  <p>All human KRA targets sourced directly from the Equinox Agents Operations Dashboard — July & August 2026.</p>
 
-  <h3 style="color:#3D8EF0; font-size:16px; margin-top:32px; margin-bottom:16px;">👤 Abhinav — Human KRAs</h3>
-  <p style="font-size:13px; color:#8A9BB5; margin-bottom:16px;">All targets sourced directly from the Equinox Agents Operations Dashboard — July & August 2026.</p>
-  <table class="summary-table">
-    <thead>
-      <tr>
-        <th>KRA Area</th>
-        <th>Key Result</th>
-        <th>Target</th>
-        <th>Source</th>
-        <th>Measurement</th>
-      </tr>
-    </thead>
+  <h3 style="color:#1E3A5F; margin-top:24px;">Abhinav — Human KRAs</h3>
+  <table class="data-table">
+    <thead><tr><th>KRA Area</th><th>Key Result</th><th>Target</th><th>Source</th><th>Measurement</th></tr></thead>
     <tbody>
       <tr><td>Team FRT</td><td>First response time across all Board LOBs</td><td>Under 20 minutes</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
       <tr><td>Total Resolution Time</td><td>Full ticket resolution time across team</td><td>Under 10 days</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
-      <tr><td>Team Quality Score</td><td>QA score across all agents</td><td>95%+ (Cloud & Product) / 100% (Premium)</td><td>Robert's QA Scorecard + Ops Dashboard</td><td>QA Audit Scores</td></tr>
+      <tr><td>Team Quality Score</td><td>QA score across all agents</td><td>95%+ Cloud & Product / 100% Premium</td><td>Robert's QA Scorecard + Ops Dashboard</td><td>QA Audit Scores</td></tr>
       <tr><td>Service Level</td><td>HC-based service level maintained</td><td>95%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
       <tr><td>Utilization</td><td>Team utilization across all task types</td><td>75%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
       <tr><td>Shrinkage</td><td>Team shrinkage kept within target</td><td>Under 10%</td><td>Ops Dashboard — Board Overall</td><td>Board Shrinkage Report</td></tr>
     </tbody>
   </table>
 
-  <h3 style="color:var(--cyan); font-size:16px; margin-top:40px; margin-bottom:16px;">🤖 AI Agent — KRAs</h3>
-  <p style="font-size:13px; color:#8A9BB5; margin-bottom:16px;">AI Agent KRAs are tied directly to the human KRAs above — measuring how much AI contribution moves each Ops Dashboard metric.</p>
-  <table class="summary-table">
-    <thead>
-      <tr>
-        <th>KRA Area</th>
-        <th>Key Result</th>
-        <th>How AI Contributes</th>
-        <th>Measurement</th>
-      </tr>
-    </thead>
+  <h3 style="color:#0D9E75; margin-top:32px;">AI Agent — KRAs</h3>
+  <p style="font-size:13px;">AI Agent KRAs are tied directly to the human KRAs above — measuring how AI contribution moves each Ops Dashboard metric.</p>
+  <table class="data-table">
+    <thead><tr><th>KRA Area</th><th>Key Result</th><th>How AI Contributes</th><th>Measurement</th></tr></thead>
     <tbody>
       <tr><td>Team FRT Improvement</td><td>Reduction in team FRT after AI vs baseline</td><td>AI surfaces relevant case history instantly — reduces agent research time per ticket</td><td>FRT on Board KPI Dashboard — monthly before vs after</td></tr>
       <tr><td>Quality Score Maintenance</td><td>Team QA scores maintained at target while volume increases</td><td>AI pre-screens all responses — flags issues before Abhinav reviews</td><td>QA Audit Scores — monthly</td></tr>
       <tr><td>Shrinkage Tracking Accuracy</td><td>Shrinkage data updated in real time — no manual delays</td><td>AI auto-calculates shrinkage from attendance data</td><td>Ops Dashboard — Board Shrinkage Report accuracy</td></tr>
       <tr><td>Service Level Support</td><td>Service level maintained at 95%+ with AI queue monitoring</td><td>AI monitors HC vs required coverage — alerts Abhinav when at risk</td><td>Service Level % on Ops Dashboard — monthly</td></tr>
       <tr><td>KCS Output</td><td>Increase in KCS articles published per month at less manual effort</td><td>AI drafts article from resolved ticket — Abhinav reviews only</td><td>Articles published per month — before vs after</td></tr>
-      <tr><td>Time Saved — Abhinav</td><td>Reduction in time on measurable tasks vs baseline</td><td>Abhinav's actual baseline: 3.5 hrs queue + 2.5 hrs QA review + 3 hrs QA monitoring per day</td><td>Abhinav self-reported time tracking — before vs after</td></tr>
+      <tr><td>Time Saved — Abhinav</td><td>Reduction in time on measurable tasks vs baseline</td><td>Actual baseline: 1.5 hrs queue + 1 hr QA review + 1 hr QA monitoring + 2.5 hrs troubleshooting per day</td><td>Abhinav self-reported time tracking — before vs after</td></tr>
     </tbody>
   </table>
 </section>
-
 <hr class="divider">
 
-<!-- SECTION 7: BEFORE & AFTER METRICS -->
+<!-- SECTION 7: BEFORE & AFTER -->
 <section>
   <div class="section-label">07 · Impact Measurement</div>
   <h2>Before & After — Actual Baseline Data</h2>
-  <p>The following data was captured directly from Abhinav — these are real numbers, not estimates. This is the baseline against which AI impact will be measured.</p>
+  <p>All current time data provided directly by Abhinav. "After AI" will be measured following pilot implementation — no projected numbers are shown.</p>
 
-  <!-- TIME-MEASURABLE TASKS -->
-  <h3 style="color:#3D8EF0; font-size:15px; margin-top:28px; margin-bottom:12px;">⏱ Time-Measurable Tasks</h3>
-  <p style="font-size:13px; color:#8A9BB5; margin-bottom:16px;">These tasks have a clear time cost that AI will directly reduce.</p>
-
-  <table class="summary-table">
-    <thead>
-      <tr>
-        <th>Task</th>
-        <th>Current Time (Actual)</th>
-        <th>After AI (Target)</th>
-        <th>Time Saved</th>
-        <th>How We Measure</th>
-      </tr>
-    </thead>
+  <h3 style="color:#1E3A5F; margin-top:24px;">Daily Tasks</h3>
+  <table class="data-table">
+    <thead><tr><th>Task</th><th>Current Time (Actual — Abhinav)</th><th>After AI</th><th>How We Measure</th></tr></thead>
     <tbody>
-      <tr><td>Attendance & HC Management</td><td>15 min/day</td><td>2 min — auto dashboard</td><td>~13 min/day</td><td>Time spent on manual checks</td></tr>
-      <tr><td>Shrinkage Management</td><td>15 min/day</td><td>2 min — auto calculated</td><td>~13 min/day</td><td>Time spent on manual updates</td></tr>
-      <tr><td>Support Queue Management</td><td>3.5+ hrs/day</td><td>1.5 hrs — AI prioritizes & flags</td><td>~2 hrs/day</td><td>Time spent on queue handling</td></tr>
-      <tr><td>Ticket Quality Review</td><td>2.5+ hrs/day</td><td>45 min — AI pre-screens, Abhinav reviews flagged only</td><td>~1.75 hrs/day</td><td>Review time per ticket before vs after</td></tr>
-      <tr><td>Real-Time QA Monitoring</td><td>3+ hrs/day</td><td>30 min — AI monitors, Abhinav acts on alerts</td><td>~2.5 hrs/day</td><td>Manual monitoring time vs alert response time</td></tr>
-      <tr><td>Ticket Troubleshooting & Coaching</td><td>1.5+ hrs/day</td><td>45 min — AI suggests steps, Abhinav coaches</td><td>~45 min/day</td><td>Time per coaching session</td></tr>
-      <tr><td>Resolution & Knowledge Capture</td><td>45 min/week</td><td>15 min — AI drafts, Abhinav reviews</td><td>~30 min/week</td><td>Time per knowledge capture</td></tr>
-      <tr><td>KCS Article Creation</td><td>30 min/article</td><td>8 min review of AI draft</td><td>~22 min/article</td><td>Time per article, articles/month</td></tr>
-      <tr><td>Weekly Knowledge Sessions</td><td>30 min/session</td><td>20 min — AI prepares agenda & summary</td><td>~10 min/session</td><td>Prep + post-session time</td></tr>
-      <tr><td>KPI & Performance Tracking</td><td>30 min/week</td><td>5 min — AI auto-generates dashboard</td><td>~25 min/week</td><td>Time on manual data pulling</td></tr>
-      <tr><td>QBR Insights & Reporting</td><td>4.5+ hrs/QBR</td><td>45 min — AI compiles draft</td><td>~3.75 hrs/QBR</td><td>Time per QBR report</td></tr>
-      <tr><td>Leadership Performance Updates</td><td>1.5 hrs/week</td><td>30 min — AI generates summary</td><td>~1 hr/week</td><td>Time per leadership update</td></tr>
+      <tr><td>Attendance & HC Management</td><td>15 min/day</td><td>To be measured after pilot</td><td>Time spent on manual checks</td></tr>
+      <tr><td>Shrinkage Management</td><td>15 min/day</td><td>To be measured after pilot</td><td>Time spent on manual updates</td></tr>
+      <tr><td>Support Queue Management</td><td>1.5 hrs/day</td><td>To be measured after pilot</td><td>Time spent on queue handling</td></tr>
+      <tr><td>Ticket Quality Review</td><td>1 hr/day</td><td>To be measured after pilot</td><td>Review time per ticket before vs after</td></tr>
+      <tr><td>Real-Time QA Monitoring</td><td>1 hr/day</td><td>To be measured after pilot</td><td>Monitoring time vs alert response time</td></tr>
+      <tr><td>Ticket Troubleshooting & Coaching</td><td>2.5 hrs/day</td><td>To be measured after pilot</td><td>Time per coaching session</td></tr>
     </tbody>
   </table>
 
-  <!-- SUMMARY BOX -->
-  <div style="margin-top:28px; background:rgba(0,194,224,0.06); border:1px solid rgba(0,194,224,0.2); border-radius:12px; padding:24px;">
-    <p style="margin:0 0 12px 0; font-size:14px; color:#B0BDD0;"><strong style="color:#fff">Measurable Time Saved Daily:</strong> Based on Abhinav's actual data — AI implementation is projected to save approximately <strong style="color:var(--cyan)">7+ hours per day</strong> on time-trackable tasks — the majority coming from Queue Management, QA Review, and Real-Time Monitoring.</p>
-    <p style="margin:0; font-size:14px; color:#B0BDD0;"><strong style="color:#fff">Key Shift:</strong> Abhinav moves from <strong style="color:var(--cyan)">doing the work → reviewing AI output and making decisions.</strong> His expertise stays — the manual effort reduces significantly.</p>
+  <h3 style="color:#1E3A5F; margin-top:28px;">Weekly & Periodic Tasks</h3>
+  <table class="data-table">
+    <thead><tr><th>Task</th><th>Current Time (Actual — Abhinav)</th><th>After AI</th><th>How We Measure</th></tr></thead>
+    <tbody>
+      <tr><td>Resolution & Knowledge Capture</td><td>2 hrs/week</td><td>To be measured after pilot</td><td>Time per knowledge capture</td></tr>
+      <tr><td>KCS Article Creation</td><td>45 min/article</td><td>To be measured after pilot</td><td>Time per article, articles/month</td></tr>
+      <tr><td>Weekly Knowledge Sessions</td><td>1 hr/session</td><td>To be measured after pilot</td><td>Prep + session + post-session time</td></tr>
+      <tr><td>KPI & Performance Tracking</td><td>2 hrs/week</td><td>To be measured after pilot</td><td>Time on manual data pulling</td></tr>
+      <tr><td>QBR Insights & Reporting</td><td>6 hrs/QBR</td><td>To be measured after pilot</td><td>Time per QBR report</td></tr>
+      <tr><td>Leadership Performance Updates</td><td>1.5 hrs/week</td><td>To be measured after pilot</td><td>Time per leadership update</td></tr>
+    </tbody>
+  </table>
+
+  <div class="summary-box" style="margin-top:24px;">
+    <p><strong>Measurement approach:</strong> The "After AI" column will be filled in after pilot implementation using the same self-reported method Abhinav used for the baseline. Ops Dashboard metrics — FRT, Quality Score, Service Level — will serve as objective before vs after data points, as they are already tracked weekly.</p>
   </div>
 </section>
+<hr class="divider">
 
+<!-- SECTION 8: PILOT MEASUREMENT PLAN -->
+<section>
+  <div class="section-label">08 · Pilot Measurement Plan</div>
+  <h2>How We Will Measure Impact</h2>
+  <p>This section defines exactly how we will prove AI made a difference — before implementation, during the pilot, and after.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Step</th><th>What</th><th>When</th><th>Who</th></tr></thead>
+    <tbody>
+      <tr><td>Baseline Lock</td><td>Confirm and document all current time data — this document serves as the baseline record</td><td>Before AI implementation begins</td><td>Samuel + Abhinav</td></tr>
+      <tr><td>AI Implementation</td><td>Deploy first AI agents — starting with highest time-impact tasks</td><td>To be confirmed after Piyush Sir approval</td><td>Samuel</td></tr>
+      <tr><td>Weekly Check-in</td><td>5-minute weekly update from Abhinav — any noticeable time changes, friction, or feedback</td><td>Every week during pilot</td><td>Abhinav → Samuel</td></tr>
+      <tr><td>Ops Dashboard Review</td><td>Compare FRT, Quality Score, Service Level vs pre-pilot baseline — same dashboard already in use</td><td>End of pilot period</td><td>Abhinav + Samuel + Piyush Sir</td></tr>
+      <tr><td>After AI Time Capture</td><td>Abhinav fills in actual time per task — same format as current baseline</td><td>End of pilot period</td><td>Abhinav</td></tr>
+      <tr><td>Results Presentation</td><td>Before vs after report presented to Piyush Sir — using Ops Dashboard data + Abhinav's time data</td><td>End of pilot period</td><td>Samuel</td></tr>
+    </tbody>
+  </table>
+
+  <div class="summary-box" style="margin-top:20px;">
+    <p><strong>Key principle:</strong> No new tracking system will be introduced. The Ops Dashboard that Abhinav already fills in weekly is the primary measurement tool. AI impact will be visible in the same report — no extra work for Abhinav.</p>
+  </div>
+</section>
 <hr class="divider">
 
 <footer>
   <p><strong>Project RISE — Board AIJD — Abhinav</strong> · Equinox Agents · August 2026</p>
-  <p style="margin-top:8px">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
-  <p style="margin-top:16px;font-style:italic;color:#4A6080">"AI handles the repetitive. Abhinav focuses on what only a human can do."</p>
+  <p style="margin-top:6px;">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
+  <p style="margin-top:12px; font-style:italic; color:#CBD5E1;">"AI handles the repetitive. Abhinav focuses on what only a human can do."</p>
 </footer>
 
 </body>
