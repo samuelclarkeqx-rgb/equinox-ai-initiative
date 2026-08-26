@@ -5,397 +5,366 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project RISE — Board AIJD — Vaibhav (Brian)</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:#F8FAFC; color:#0F172A; font-family:'Inter',sans-serif; line-height:1.7; }
+  body { background:#F8FAFC; color:#0F172A; font-family:'Inter',sans-serif; line-height:1.6; }
 
-  .hero { background:#1E3A5F; padding:48px 40px; }
-  .hero-badge { display:inline-block; background:rgba(126,179,232,0.15); border:1px solid rgba(126,179,232,0.3); color:#7EB3E8; padding:5px 14px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:20px; }
-  .hero h1 { font-size:clamp(28px,4vw,48px); font-weight:600; color:#FFFFFF; margin-bottom:8px; letter-spacing:-0.5px; }
+  .hero { background:#1E3A5F; padding:48px 40px 40px; }
+  .hero-badge { display:inline-block; background:rgba(126,179,232,0.15); border:1px solid rgba(126,179,232,0.3); color:#7EB3E8; padding:4px 14px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:18px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(24px,4vw,42px); font-weight:700; color:#FFFFFF; margin-bottom:6px; letter-spacing:-0.5px; }
   .hero h1 span { color:#7EB3E8; }
-  .hero-sub { font-size:15px; color:#A8C8E8; margin-bottom:24px; }
-  .hero-meta { display:flex; gap:32px; flex-wrap:wrap; }
-  .hero-meta-item .label { font-size:11px; color:#7EB3E8; text-transform:uppercase; letter-spacing:1px; }
-  .hero-meta-item .value { font-size:13px; font-weight:600; color:#F1F5F9; margin-top:2px; }
+  .hero-sub { font-size:14px; color:#A8C8E8; margin-bottom:24px; }
+  .hero-meta { display:flex; gap:28px; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:10px; color:#7EB3E8; text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:13px; font-weight:600; color:#F1F5F9; margin-top:1px; }
 
-  section { max-width:960px; margin:0 auto; padding:48px 40px; }
-  .section-label { font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:#1E6FD9; margin-bottom:8px; }
-  h2 { font-size:clamp(18px,2.5vw,26px); font-weight:600; color:#0F172A; margin-bottom:14px; }
-  h3 { font-size:16px; font-weight:600; margin-bottom:12px; }
-  p { color:#475569; font-size:14px; margin-bottom:12px; }
-  .divider { border:none; border-top:1px solid #E2E8F0; margin:0; }
+  .container { max-width:860px; margin:0 auto; padding:0 32px 64px; }
 
-  .legend { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:28px; }
-  .legend-item { display:flex; align-items:center; gap:8px; font-size:13px; color:#475569; }
-  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .dot-human { background:#1E3A5F; }
-  .dot-ai { background:#0D9E75; }
+  .section-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:10px; margin-top:20px; overflow:hidden; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; cursor:pointer; user-select:none; transition:background 0.15s; }
+  .section-header:hover { background:#F8FAFC; }
+  .section-header-left { display:flex; align-items:center; gap:14px; }
+  .section-num { width:28px; height:28px; border-radius:6px; background:#1E3A5F; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .section-title { font-size:15px; font-weight:600; color:#0F172A; }
+  .section-summary { font-size:12px; color:#64748B; margin-top:2px; }
+  .section-chevron { color:#94A3B8; font-size:18px; transition:transform 0.2s; flex-shrink:0; }
+  .section-card.open .section-chevron { transform:rotate(180deg); }
+  .section-body { display:none; padding:0 24px 24px; border-top:1px solid #F1F5F9; }
+  .section-card.open .section-body { display:block; }
 
-  .jd-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-  .jd-human { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #1E3A5F; border-radius:8px; padding:16px 20px; }
-  .jd-ai { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #0D9E75; border-radius:8px; padding:16px 20px; }
-  .jd-human-only { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #1E3A5F; border-radius:8px; padding:16px 20px; grid-column:1; }
-  .jd-ai-only { background:#FFFFFF; border:0.5px solid #E2E8F0; border-left:3px solid #0D9E75; border-radius:8px; padding:16px 20px; grid-column:2; }
+  .field-label { font-size:10px; font-weight:700; color:#1E6FD9; text-transform:uppercase; letter-spacing:1px; margin:20px 0 6px; }
+  .field-value { font-size:13px; color:#334155; line-height:1.65; }
 
-  .role-tag { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
-  .human-tag { color:#1E3A5F; }
-  .ai-tag { color:#0D9E75; }
-  .card-title { font-size:13px; font-weight:600; color:#0F172A; margin-bottom:5px; }
-  .card-desc { font-size:12px; color:#64748B; line-height:1.6; }
-  .handoff-note { background:#F5F3FF; border:0.5px solid #C4B5FD; border-radius:6px; padding:8px 14px; margin-top:8px; font-size:12px; color:#6D28D9; }
+  .resp-list { list-style:none; margin-top:4px; }
+  .resp-list li { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid #F1F5F9; font-size:13px; color:#334155; }
+  .resp-list li:last-child { border-bottom:none; }
+  .resp-list li::before { content:'▸'; color:#1E6FD9; font-size:11px; margin-top:2px; flex-shrink:0; }
 
-  .proposal-box { background:#EBF3FB; border:0.5px solid #BFDBFE; border-left:3px solid #1E6FD9; border-radius:8px; padding:20px 24px; margin-top:16px; }
-  .proposal-box h4 { font-size:14px; font-weight:600; color:#1E3A5F; margin-bottom:8px; }
-  .proposal-box p { color:#1E3A5F; font-size:13px; margin-bottom:8px; }
-  .proposal-box ul { list-style:none; margin-top:8px; }
-  .proposal-box ul li { font-size:13px; color:#1E3A5F; padding:3px 0 3px 16px; position:relative; }
-  .proposal-box ul li::before { content:'▸'; position:absolute; left:0; color:#1E6FD9; font-size:11px; top:4px; }
+  .cap-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .cap-card { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:12px 16px; }
+  .cap-card h4 { font-size:12px; font-weight:600; color:#0D9E75; margin-bottom:4px; }
+  .cap-card p { font-size:12px; color:#64748B; line-height:1.5; }
+  .cap-card.proposal h4 { color:#1E6FD9; }
+  .cap-card.proposal { border-color:#BFDBFE; background:#EBF3FB; }
 
-  .data-table { width:100%; border-collapse:collapse; margin-top:16px; font-size:13px; }
-  .data-table th { background:#1E3A5F; color:#FFFFFF; font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; padding:11px 16px; text-align:left; }
-  .data-table td { padding:11px 16px; border-bottom:0.5px solid #E2E8F0; color:#475569; vertical-align:top; }
-  .data-table tr:last-child td { border-bottom:none; }
-  .data-table td:first-child { color:#0F172A; font-weight:500; }
-  .data-table tr:nth-child(even) td { background:#F8FAFC; }
+  .measure-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:12px; }
+  .measure-table th { background:#1E3A5F; color:#fff; padding:8px 14px; text-align:left; font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+  .measure-table td { padding:9px 14px; border-bottom:1px solid #F1F5F9; color:#334155; vertical-align:top; }
+  .measure-table tr:last-child td { border-bottom:none; }
+  .measure-table td:first-child { font-weight:500; color:#0F172A; }
+  .measure-table tr:nth-child(even) td { background:#F8FAFC; }
 
-  .tag { display:inline-block; padding:3px 10px; border-radius:100px; font-size:11px; font-weight:600; }
-  .tag-shared { background:#EFF6FF; color:#1D4ED8; border:0.5px solid #BFDBFE; }
-  .tag-human { background:#F8FAFC; color:#475569; border:0.5px solid #E2E8F0; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; }
+  .tag-leading { background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE; }
+  .tag-lagging { background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; }
+  .tag-ai { background:#FFF7ED; color:#C2410C; border:1px solid #FED7AA; }
 
-  .summary-box { background:#EBF3FB; border:0.5px solid #BFDBFE; border-left:3px solid #1E6FD9; border-radius:8px; padding:20px 24px; margin-top:20px; }
-  .summary-box p { color:#1E3A5F; margin:0; font-size:14px; }
+  .always-on { background:#F0FDF4; border:1px solid #BBF7D0; border-left:3px solid #0D9E75; border-radius:8px; padding:12px 16px; margin-top:8px; font-size:12px; color:#065F46; }
+  .always-on strong { color:#065F46; }
 
-  .continuous-note { background:#F0FDF4; border:0.5px solid #BBF7D0; border-left:3px solid #0D9E75; border-radius:8px; padding:16px 20px; margin-bottom:12px; }
-  .continuous-note h4 { font-size:13px; font-weight:600; color:#065F46; margin-bottom:6px; }
-  .continuous-note p { font-size:12px; color:#047857; margin:0; }
+  .boundary { background:#FFF1F2; border:1px solid #FECDD3; border-radius:6px; padding:10px 14px; font-size:12px; color:#9F1239; margin-top:8px; }
+  .placeholder { background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:10px 14px; font-size:12px; color:#92400E; margin-top:8px; }
 
-  footer { text-align:center; padding:40px; border-top:1px solid #E2E8F0; background:#FFFFFF; color:#94A3B8; font-size:13px; }
+  .loop { display:flex; align-items:center; gap:0; margin-top:12px; flex-wrap:wrap; }
+  .loop-step { background:#EBF3FB; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; font-size:11px; font-weight:600; color:#1E3A5F; text-align:center; flex:1; min-width:100px; }
+  .loop-arrow { color:#94A3B8; font-size:16px; padding:0 6px; flex-shrink:0; }
+
+  footer { text-align:center; padding:32px; border-top:1px solid #E2E8F0; background:#fff; color:#94A3B8; font-size:12px; }
   footer strong { color:#1E3A5F; }
 
   @media(max-width:600px) {
-    section { padding:32px 20px; }
-    .jd-row { grid-template-columns:1fr; }
-    .jd-ai-only { grid-column:1; }
     .hero { padding:32px 20px; }
+    .container { padding:0 16px 48px; }
+    .cap-grid { grid-template-columns:1fr; }
     .hero-meta { gap:16px; }
+    .section-header { padding:14px 16px; }
+    .section-body { padding:0 16px 20px; }
   }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">Project RISE · Board · Agent AIJD</div>
+  <div class="hero-badge">Project RISE · Board · AIJD</div>
   <h1>Vaibhav + <span>AI Partner</span></h1>
-  <p class="hero-sub">Human Job Description alongside AI Job Description — L1 Support Agent (Most Tenured)</p>
+  <p class="hero-sub">L1 Support Agent (Most Tenured) — Board Process · Human Role alongside AI Role</p>
   <div class="hero-meta">
-    <div class="hero-meta-item"><div class="label">Role</div><div class="value">L1 Support Agent — Board</div></div>
     <div class="hero-meta-item"><div class="label">Submitted to</div><div class="value">Piyush Parikh & Ashwin</div></div>
-    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
     <div class="hero-meta-item"><div class="label">Prepared by</div><div class="value">Samuel</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Version</div><div class="value">v2 — 6-Section Format</div></div>
   </div>
 </div>
-<hr class="divider">
 
-<!-- HOW TO READ -->
-<section>
-  <div class="section-label">How to read this document</div>
-  <h2>Human JD + AI JD — Side by Side</h2>
-  <p>Each responsibility from Vaibhav's JD is shown alongside what an AI partner will handle. Some tasks cannot be measured in time — these are always-on responsibilities that AI transforms from constant monitoring to alert-based action.</p>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot dot-human"></div>Human — Vaibhav owns this</div>
-    <div class="legend-item"><div class="legend-dot dot-ai"></div>AI Partner handles this</div>
-  </div>
-</section>
-<hr class="divider">
+<div class="container">
 
-<!-- SECTION 1: QUEUE & TICKETS -->
-<section>
-  <div class="section-label">01 · Queue & Ticket Management</div>
-  <h2>Daily Queue & Ticket Work</h2>
-
-  <div class="continuous-note">
-    <h4>Always-On Tasks — Points 1 & 3</h4>
-    <p>Queue Management and Queue Monitoring are the same continuous responsibility. This cannot be measured in time — it requires constant attention every minute of every shift. Vaibhav must also manually check a Google Sheet per ticket to identify if the customer is a Premium client before triaging to Board T2. AI transforms this from constant manual checking to instant automated alerting.</p>
-  </div>
-
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Queue Management & Monitoring</div>
-      <div class="card-desc">Actively manage and monitor the support queue every minute. Manually check Google Sheet per ticket to verify if customer is Premium before triaging to Board T2.</div>
+  <!-- SECTION 1: HUMAN ROLE -->
+  <div class="section-card open" id="s1">
+    <div class="section-header" onclick="toggle('s1')">
+      <div class="section-header-left">
+        <div class="section-num">1</div>
+        <div>
+          <div class="section-title">Human Role</div>
+          <div class="section-summary">Who Vaibhav is and what he is responsible for</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
     </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">Smart Queue & Premium Flag Agent</div>
-      <div class="card-desc">AI screen reader automatically checks if the ticket is from a Premium customer or in critical stage on ticket open — flags instantly on SFDC. No manual Google Sheet lookup needed. Vaibhav acts only on AI flags.</div>
-      <div class="handoff-note">Handoff: Vaibhav reviews AI flag and takes correct triage action.</div>
-    </div>
-  </div>
+    <div class="section-body">
+      <div class="field-label">Role Title</div>
+      <div class="field-value">L1 Support Agent — Board Process (Most Tenured)</div>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Ticket Quality Review</div>
-      <div class="card-desc">Review agent responses before submission to ensure accuracy, quality, and appropriate customer communication. Current time: 10 min/ticket — 8 hrs/day.</div>
-    </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">Pre-Send Quality Check</div>
-      <div class="card-desc">Before any response is sent, AI automatically checks for tone, accuracy, completeness, and SOP adherence — flagging issues with suggested corrections.</div>
-      <div class="handoff-note">Handoff: Vaibhav reviews AI suggestions, makes final call, sends response.</div>
-    </div>
-  </div>
-</section>
-<hr class="divider">
+      <div class="field-label">Role Purpose</div>
+      <div class="field-value">Vaibhav exists to deliver accurate, timely, and high-quality first-line support to Board customers — while serving as a knowledge anchor for the team through his tenure and product expertise.</div>
 
-<!-- SECTION 2: TECHNICAL & KNOWLEDGE -->
-<section>
-  <div class="section-label">02 · Technical Support & Knowledge</div>
-  <h2>Troubleshooting & Research</h2>
+      <div class="field-label">Primary Outcomes</div>
+      <ul class="resp-list" style="margin-top:8px;">
+        <li>First response to customers under 20 minutes across all Board LOBs</li>
+        <li>QA score at 95%+ (Cloud & Product) and 100% (Premium)</li>
+        <li>Correct triage — Premium and critical cases identified and routed accurately</li>
+        <li>Knowledge articles published consistently from resolved tickets</li>
+        <li>New agents onboarded and ramped to team standards</li>
+      </ul>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Ticket Troubleshooting & Research</div>
-      <div class="card-desc">Research and troubleshoot complex tickets by searching multiple sources. Current time: 10 min/ticket — 5 hrs/day.</div>
-    </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">AI Troubleshooting Suggester</div>
-      <div class="card-desc">When a ticket arrives, AI instantly searches Salesforce, Help.Board.com, Community Portal, internal docs, and resolved tickets — surfacing the most relevant troubleshooting steps before Vaibhav opens the case.</div>
-      <div class="handoff-note">Handoff: Vaibhav reviews AI suggestions, applies expertise, resolves the case.</div>
+      <div class="field-label">Key Responsibilities — Time-Measurable</div>
+      <ul class="resp-list">
+        <li>Ticket quality review — 10 min/ticket, 8 hrs/day</li>
+        <li>Ticket troubleshooting & research — 10 min/ticket, 5 hrs/day</li>
+        <li>SFDC customer alert check (Google Sheet) — 3 min/ticket, 45 min/day</li>
+        <li>Community queue management — 45 min/ticket, low frequency</li>
+        <li>Knowledge article creation — 1.5 hrs/article</li>
+        <li>Training & onboarding new agents — 23 hrs/week</li>
+      </ul>
+
+      <div class="field-label">Key Responsibilities — Always-On</div>
+      <div class="always-on">
+        <strong>These cannot be measured in time — they require constant attention every minute of every shift:</strong><br><br>
+        Queue management & monitoring — Vaibhav must manually check a Google Sheet per ticket to identify Premium customers before triaging to Board T2.<br><br>
+        Infrastructure monitoring (PagerDuty) — Critical alerts currently reach only one agent. Rest of team is unaware.<br><br>
+        Agent support & guidance — Always available reactively throughout the day.
+      </div>
+
+      <div class="field-label">What Only Vaibhav Can Do</div>
+      <ul class="resp-list">
+        <li>Customer & client calls — relationship and complex investigation</li>
+        <li>Training & onboarding new agents — judgment, empathy, culture</li>
+        <li>Stakeholder & Academy collaboration</li>
+      </ul>
     </div>
   </div>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Knowledge Article Creation</div>
-      <div class="card-desc">Identify reusable resolutions and convert them into knowledge articles. Current time: 1.5 hrs/article.</div>
+  <!-- SECTION 2: AI ROLE -->
+  <div class="section-card" id="s2">
+    <div class="section-header" onclick="toggle('s2')">
+      <div class="section-header-left">
+        <div class="section-num">2</div>
+        <div>
+          <div class="section-title">AI Role</div>
+          <div class="section-summary">Board L1 Support Copilot — one AI partner, multiple capabilities</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
     </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">Auto Knowledge Article Generator</div>
-      <div class="card-desc">When a ticket is resolved, AI automatically drafts a knowledge article from the ticket conversation — issue, steps taken, resolution — ready for Vaibhav to review and publish.</div>
-      <div class="handoff-note">Handoff: Vaibhav reviews draft, approves or edits, publishes to knowledge base.</div>
+    <div class="section-body">
+      <div class="field-label">AI Role Name</div>
+      <div class="field-value"><strong>Board L1 Support Copilot</strong></div>
+
+      <div class="field-label">Purpose</div>
+      <div class="field-value">Help Vaibhav deliver faster, more accurate and consistent support by providing customer context, research assistance, quality checks, queue monitoring, and knowledge creation — so Vaibhav can focus on solving complex problems and coaching others.</div>
+
+      <div class="field-label">Boundaries</div>
+      <div class="boundary">AI suggests, flags, and drafts only. Vaibhav reviews and decides before any response is sent. AI never communicates with customers directly. AI never makes triage or escalation decisions — it flags and Vaibhav acts.</div>
+
+      <div class="field-label">Capabilities</div>
+      <div class="cap-grid">
+        <div class="cap-card proposal">
+          <h4>SFDC Smart Alert — Vaibhav's Proposal</h4>
+          <p>On ticket open, AI auto-checks Google Sheet for Premium status or special SLA — pops up alert on SFDC instantly. No manual lookup needed.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Troubleshooting Suggester</h4>
+          <p>Instantly searches Salesforce, Help.Board.com, Community Portal, internal docs and resolved tickets — surfaces relevant steps before Vaibhav opens the case.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Pre-Send Quality Check</h4>
+          <p>Before response is sent, AI checks tone, accuracy, completeness and SOP adherence — flags issues with suggestions.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Queue & Priority Monitor</h4>
+          <p>Monitors queue continuously — alerts Vaibhav when SLA is at risk or a high-priority customer submits.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Knowledge Article Generator</h4>
+          <p>On ticket close, AI auto-drafts a knowledge article from the conversation — Vaibhav reviews and publishes.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Team-Wide PagerDuty Alerts</h4>
+          <p>AI classifies PagerDuty severity — sends Slack notification to entire team for critical alerts, not just one agent.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Community Queue Monitor</h4>
+          <p>Monitors Community queue — flags issues and suggests responses based on similar resolved posts.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Case Summary Generator</h4>
+          <p>Auto-generates internal case summary on ticket creation — product, environment, error identified automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: HUMAN MEASURES -->
+  <div class="section-card" id="s3">
+    <div class="section-header" onclick="toggle('s3')">
+      <div class="section-header-left">
+        <div class="section-num">3</div>
+        <div>
+          <div class="section-title">Human Measures</div>
+          <div class="section-summary">Leading & lagging indicators for Vaibhav's performance</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Indicator</th><th>Type</th><th>Target</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Correct triage rate — Premium vs non-Premium</td><td><span class="tag tag-leading">Leading</span></td><td>Accurate on every ticket</td><td>Triage audit</td></tr>
+          <tr><td>SOP & process adherence</td><td><span class="tag tag-leading">Leading</span></td><td>Consistent</td><td>QA audits</td></tr>
+          <tr><td>Knowledge/resource usage per ticket</td><td><span class="tag tag-leading">Leading</span></td><td>Used on complex tickets</td><td>QA observation</td></tr>
+          <tr><td>Knowledge articles published</td><td><span class="tag tag-leading">Leading</span></td><td>Consistent output</td><td>Knowledge base count</td></tr>
+          <tr><td>New agent readiness after onboarding</td><td><span class="tag tag-leading">Leading</span></td><td>Agent meets QA standard within ramp period</td><td>QA scores post-onboarding</td></tr>
+          <tr><td>First Response Time</td><td><span class="tag tag-lagging">Lagging</span></td><td>Under 20 min</td><td>Ops Dashboard</td></tr>
+          <tr><td>Total Resolution Time</td><td><span class="tag tag-lagging">Lagging</span></td><td>Under 10 days</td><td>Ops Dashboard</td></tr>
+          <tr><td>QA Score</td><td><span class="tag tag-lagging">Lagging</span></td><td>95%+ / 100% Premium</td><td>Ops Dashboard</td></tr>
+          <tr><td>Service Level %</td><td><span class="tag tag-lagging">Lagging</span></td><td>95%+</td><td>Ops Dashboard</td></tr>
+          <tr><td>Utilization %</td><td><span class="tag tag-lagging">Lagging</span></td><td>75%+</td><td>Ops Dashboard</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Infrastructure Monitoring (PagerDuty)</div>
-      <div class="card-desc">Monitor PagerDuty continuously for critical infrastructure incidents. Currently only one agent sees alerts — rest of team is unaware.</div>
+  <!-- SECTION 4: AI MEASURES -->
+  <div class="section-card" id="s4">
+    <div class="section-header" onclick="toggle('s4')">
+      <div class="section-header-left">
+        <div class="section-num">4</div>
+        <div>
+          <div class="section-title">AI Measures</div>
+          <div class="section-summary">How we know the AI partner is working before outcomes change</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
     </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">Team-Wide Incident Alert Agent</div>
-      <div class="card-desc">AI classifies alert severity — sends Slack notification to entire team for critical alerts, not just one agent. Non-critical noise filtered automatically.</div>
-      <div class="handoff-note">Handoff: Team receives alert via Slack — Vaibhav coordinates response.</div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Indicator</th><th>Type</th><th>What it tells us</th></tr></thead>
+        <tbody>
+          <tr><td>SFDC alert accuracy rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are Premium customer flags correct? Are false alerts low?</td></tr>
+          <tr><td>Troubleshooting suggestion usage rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Is Vaibhav using AI research suggestions or ignoring them?</td></tr>
+          <tr><td>QA pre-check flag acceptance rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are AI quality flags accurate and actionable?</td></tr>
+          <tr><td>Knowledge draft acceptance rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are AI-drafted articles good enough to publish with minimal edits?</td></tr>
+          <tr><td>PagerDuty alert coverage rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are critical alerts reaching the whole team vs just one agent?</td></tr>
+          <tr><td>Human correction rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>How often does Vaibhav need to override or correct AI output?</td></tr>
+          <tr><td>Repeat AI errors</td><td><span class="tag tag-ai">AI Leading</span></td><td>Is AI making the same mistakes repeatedly?</td></tr>
+          <tr><td>Time saved vs baseline</td><td><span class="tag tag-ai">AI Leading</span></td><td>Actual baseline: 8 hrs/day QA review + 5 hrs/day troubleshooting + 45 min/day SFDC checks. Measured after pilot.</td></tr>
+        </tbody>
+      </table>
+      <div class="placeholder">⏳ AI outcome targets will be set after pilot testing provides reliable evidence. No assumed numbers.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: HUMAN + AI MEASURES -->
+  <div class="section-card" id="s5">
+    <div class="section-header" onclick="toggle('s5')">
+      <div class="section-header-left">
+        <div class="section-num">5</div>
+        <div>
+          <div class="section-title">Human + AI Measures</div>
+          <div class="section-summary">Does the combination outperform human alone?</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Measure</th><th>Baseline (Actual)</th><th>After Pilot</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>First Response Time</td><td>To be confirmed from Ops Dashboard</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Ops Dashboard</td></tr>
+          <tr><td>QA Score</td><td>Per Ops Dashboard</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Ops Dashboard</td></tr>
+          <tr><td>Triage accuracy — Premium identification</td><td>Manual Google Sheet check per ticket</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Triage audit</td></tr>
+          <tr><td>Time on QA review/day</td><td>8 hrs/day (Vaibhav confirmed)</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Self-reported</td></tr>
+          <tr><td>Time on troubleshooting/day</td><td>5 hrs/day (Vaibhav confirmed)</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Self-reported</td></tr>
+          <tr><td>SFDC manual check time/day</td><td>45 min/day (Vaibhav confirmed)</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Self-reported</td></tr>
+          <tr><td>Knowledge articles published/month</td><td>Current output</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Knowledge base</td></tr>
+        </tbody>
+      </table>
+      <div class="placeholder">⏳ "After Pilot" column will be filled using the same Ops Dashboard Abhinav already fills weekly — no new tracking system needed.</div>
     </div>
   </div>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">Community Queue Management</div>
-      <div class="card-desc">Monitor Community queue and assist with issues reported by learners. Current time: 45 min/ticket — frequency is low.</div>
+  <!-- SECTION 6: TEAM LEADER AI -->
+  <div class="section-card" id="s6">
+    <div class="section-header" onclick="toggle('s6')">
+      <div class="section-header-left">
+        <div class="section-num">6</div>
+        <div>
+          <div class="section-title">Team Leader AI</div>
+          <div class="section-summary">How Vaibhav's AI partner gets managed and improved</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
     </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner</div>
-      <div class="card-title">Community Queue Monitor</div>
-      <div class="card-desc">Monitors Community queue in parallel — flags issues needing Vaibhav's attention and suggests responses based on similar community posts already resolved.</div>
-      <div class="handoff-note">Handoff: Vaibhav reviews flagged community issues and responds.</div>
-    </div>
-  </div>
+    <div class="section-body">
+      <div class="field-label">What the Team Leader AI Monitors</div>
+      <ul class="resp-list">
+        <li>Vaibhav's performance against human KRAs — FRT, QA, triage accuracy</li>
+        <li>AI Copilot's leading indicators — alert accuracy, suggestion usage, draft quality</li>
+        <li>Combined Human + AI outcomes vs baseline</li>
+      </ul>
 
-  <div class="jd-row">
-    <div class="jd-human">
-      <div class="role-tag human-tag">Human — Vaibhav</div>
-      <div class="card-title">SFDC Customer Alert Check</div>
-      <div class="card-desc">Manually check Google Sheet per ticket to verify special SLAs, triage rules, account-specific notes. Current time: 3 min/ticket — 45 min/day.</div>
-    </div>
-    <div class="jd-ai">
-      <div class="role-tag ai-tag">AI Partner — Vaibhav's Own Proposal</div>
-      <div class="card-title">SFDC Smart Alert System</div>
-      <div class="card-desc">Agent opens ticket on SFDC — AI automatically checks Google Sheet for relevant customer updates — pop-up alert appears instantly if match found. Zero manual lookup needed.</div>
-      <div class="handoff-note">Handoff: Vaibhav reads alert and proceeds with correct action.</div>
-    </div>
-  </div>
-</section>
-<hr class="divider">
+      <div class="field-label">What it Identifies</div>
+      <ul class="resp-list">
+        <li>Recurring ticket types where AI suggestions are wrong or unused</li>
+        <li>Triage errors — Premium customers being missed</li>
+        <li>Knowledge gaps — tickets resolved without matching knowledge article</li>
+        <li>AI capabilities not being used — flagging underutilisation</li>
+        <li>AI prompt or instruction improvements needed</li>
+      </ul>
 
-<!-- SECTION 3: VAIBHAV'S PROPOSAL -->
-<section>
-  <div class="section-label">03 · Vaibhav's AI Proposal — Detail</div>
-  <h2>SFDC Smart Alert System</h2>
-  <div class="proposal-box">
-    <h4>The Problem</h4>
-    <p>Board International does not update Salesforce frequently. Important customer info — special SLAs, triage rules, account notes — is shared via Teams and tracked in a Google Sheet. Every agent must remember to check this sheet before handling every ticket.</p>
-    <h4 style="margin-top:12px;">The Solution</h4>
-    <ul>
-      <li>Agent opens a case on Salesforce</li>
-      <li>AI automatically checks the Google Sheet for any relevant update matching the customer or issue type</li>
-      <li>If a match is found — a pop-up alert appears on SFDC immediately</li>
-      <li>Agent reads the alert and proceeds with the correct action</li>
-    </ul>
-    <h4 style="margin-top:12px;">Examples</h4>
-    <p>UNHCR case opens — AI alerts: "UNHCR is not a Premium customer despite SFDC showing otherwise. Follow non-Premium SOP."</p>
-    <p>Primark case with product issue — AI alerts: "All Primark product-related cases must be triaged to the Wipro queue."</p>
-  </div>
-</section>
-<hr class="divider">
+      <div class="field-label">The Improvement Loop</div>
+      <div class="loop">
+        <div class="loop-step">AI assists Vaibhav</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Vaibhav accepts or corrects</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Outcomes measured</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Patterns detected</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Human or AI improved</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Results measured again</div>
+      </div>
 
-<!-- SECTION 4: HUMAN ONLY -->
-<section>
-  <div class="section-label">04 · Human Only</div>
-  <h2>What Stays With Vaibhav</h2>
-  <p>These responsibilities require Vaibhav's expertise, relationships, and judgment — AI does not replace these.</p>
-  <div class="jd-row">
-    <div class="jd-human-only">
-      <div class="role-tag human-tag">Human Only</div>
-      <div class="card-title">Customer & Client Calls</div>
-      <div class="card-desc">Arranging and participating in customer and client calls to investigate complex issues and build relationships requires human communication and trust.</div>
-    </div>
-    <div class="jd-ai-only">
-      <div class="role-tag human-tag">Human Only</div>
-      <div class="card-title">Training & Onboarding New Agents</div>
-      <div class="card-desc">Training new agents on product knowledge, support processes, and team culture requires Vaibhav's experience and ability to read how a new agent is progressing. Current time: 23 hrs/week.</div>
+      <div class="placeholder" style="margin-top:16px;">⏳ Team Leader AI monitoring capabilities will be defined after pilot data is collected. Placeholders mark where we do not yet have answers.</div>
     </div>
   </div>
-  <div class="jd-row">
-    <div class="jd-human-only">
-      <div class="role-tag human-tag">Human Only</div>
-      <div class="card-title">Agent Support & Guidance</div>
-      <div class="card-desc">Assisting colleagues with doubts and complex scenarios in real time requires human judgment and experience. Time is included within the Ticket Quality Review daily average.</div>
-    </div>
-    <div class="jd-ai-only">
-      <div class="role-tag human-tag">Human Only</div>
-      <div class="card-title">Stakeholder & Academy Collaboration</div>
-      <div class="card-desc">Maintaining alignment with LOB stakeholders and collaborating with the Academy team on course creation requires relationship management and strategic judgment.</div>
-    </div>
-  </div>
-</section>
-<hr class="divider">
 
-<!-- SECTION 5: KRAs -->
-<section>
-  <div class="section-label">05 · Key Result Areas</div>
-  <h2>KRAs — Vaibhav & AI Partner</h2>
-  <p>All human KRA targets sourced directly from the Equinox Agents Operations Dashboard — July & August 2026.</p>
-
-  <h3 style="color:#1E3A5F; margin-top:24px;">Vaibhav — Human KRAs</h3>
-  <table class="data-table">
-    <thead><tr><th>KRA Area</th><th>Key Result</th><th>Target</th><th>Source</th><th>Measurement</th></tr></thead>
-    <tbody>
-      <tr><td>First Response Time</td><td>FRT on assigned tickets across all Board LOBs</td><td>Under 20 minutes</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
-      <tr><td>Total Resolution Time</td><td>Full ticket resolution time</td><td>Under 10 days</td><td>Ops Dashboard — Board Cloud, Product, Premium</td><td>Board KPI Dashboard</td></tr>
-      <tr><td>Ticket Quality Score</td><td>QA score on reviewed responses</td><td>95%+ Cloud & Product / 100% Premium</td><td>Robert's QA Scorecard + Ops Dashboard</td><td>QA Audit Scores</td></tr>
-      <tr><td>Service Level</td><td>HC-based service level maintained</td><td>95%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
-      <tr><td>Utilization</td><td>Agent utilization across all task types</td><td>75%+</td><td>Ops Dashboard — Board Overall</td><td>Board KPI Dashboard</td></tr>
-      <tr><td>Shrinkage</td><td>Personal shrinkage kept within team target</td><td>Under 10%</td><td>Ops Dashboard — Board Overall</td><td>Board Shrinkage Report</td></tr>
-    </tbody>
-  </table>
-
-  <h3 style="color:#0D9E75; margin-top:32px;">AI Agent — KRAs</h3>
-  <p style="font-size:13px;">AI Agent KRAs are tied directly to the human KRAs above — measuring how AI contribution moves each Ops Dashboard metric.</p>
-  <table class="data-table">
-    <thead><tr><th>KRA Area</th><th>Key Result</th><th>How AI Contributes</th><th>Measurement</th></tr></thead>
-    <tbody>
-      <tr><td>FRT Improvement</td><td>Reduction in FRT after AI vs baseline</td><td>AI surfaces relevant info instantly — reduces research time per ticket</td><td>FRT on Board KPI Dashboard — monthly before vs after</td></tr>
-      <tr><td>Quality Score Maintenance</td><td>QA scores maintained at target while ticket volume increases</td><td>AI pre-checks responses before submission — flags issues automatically</td><td>QA Audit Scores — monthly</td></tr>
-      <tr><td>Triage Accuracy</td><td>Correct Premium vs non-Premium identification on every ticket open</td><td>AI screen reader flags Premium customers automatically — eliminates manual Google Sheet check</td><td>Triage % on Ops Dashboard vs manual error rate before pilot</td></tr>
-      <tr><td>Time Saved — Measurable Tasks</td><td>Reduction in time on measurable tasks vs baseline</td><td>Actual baseline: 10 min/ticket QA review (8 hrs/day) + 10 min/ticket troubleshooting (5 hrs/day) + 45 min/day SFDC checks</td><td>Time tracking before vs after — Vaibhav self-reported</td></tr>
-      <tr><td>Alert Coverage</td><td>Critical PagerDuty alerts reach entire team — not just one agent</td><td>AI sends Slack notifications team-wide for critical infrastructure alerts</td><td>Response time to critical alerts, team notification coverage</td></tr>
-      <tr><td>Knowledge Article Output</td><td>Increase in articles published per month at same or less effort</td><td>AI drafts article from resolved ticket — Vaibhav reviews only</td><td>Articles published per month — before vs after</td></tr>
-    </tbody>
-  </table>
-</section>
-<hr class="divider">
-
-<!-- SECTION 6: BEFORE & AFTER -->
-<section>
-  <div class="section-label">06 · Impact Measurement</div>
-  <h2>Before & After — Actual Baseline Data</h2>
-  <p>All current time data provided directly by Vaibhav. "After AI" will be measured following pilot implementation — no projected numbers are shown.</p>
-
-  <h3 style="color:#1E3A5F; margin-top:24px;">Time-Measurable Tasks</h3>
-  <table class="data-table">
-    <thead><tr><th>Task</th><th>Current Time (Actual — Vaibhav)</th><th>After AI</th><th>How We Measure</th></tr></thead>
-    <tbody>
-      <tr><td>Ticket Quality Review</td><td>10 min/ticket — 8 hrs/day</td><td>To be measured after pilot</td><td>Time per ticket before vs after</td></tr>
-      <tr><td>Ticket Troubleshooting & Research</td><td>10 min/ticket — 5 hrs/day</td><td>To be measured after pilot</td><td>Research time per ticket</td></tr>
-      <tr><td>Knowledge Article Creation</td><td>1.5 hrs/article</td><td>To be measured after pilot</td><td>Time per article, articles/month</td></tr>
-      <tr><td>SFDC Customer Alert Check</td><td>3 min/ticket — 45 min/day</td><td>To be measured after pilot</td><td>Time saved per ticket, SOP errors prevented</td></tr>
-      <tr><td>Community Queue</td><td>45 min/ticket — low frequency</td><td>To be measured after pilot</td><td>Time per community ticket</td></tr>
-      <tr><td>Training & Onboarding</td><td>23 hrs/week</td><td>To be measured after pilot</td><td>Hours per new agent onboarded</td></tr>
-    </tbody>
-  </table>
-
-  <h3 style="color:#1E3A5F; margin-top:28px;">Continuous / Always-On Tasks</h3>
-  <p style="font-size:13px;">These tasks cannot be measured in time. AI transforms them from constant human monitoring to alert-based human action.</p>
-  <table class="data-table">
-    <thead><tr><th>Task</th><th>Current State</th><th>AI Opportunity</th><th>After AI</th><th>How We Measure</th></tr></thead>
-    <tbody>
-      <tr>
-        <td>Queue Management & Monitoring</td>
-        <td>Constant monitoring every minute. Manual Google Sheet check per ticket for Premium/critical status before T2 triage</td>
-        <td>AI screen reader auto-checks Premium status on ticket open — instant SFDC alert. No Google Sheet lookup needed</td>
-        <td>Vaibhav acts only on AI flags</td>
-        <td>Triage accuracy rate, missed Premium ticket rate</td>
-      </tr>
-      <tr>
-        <td>Infrastructure Monitoring (PagerDuty)</td>
-        <td>Continuous monitoring — every alert manually reviewed by one agent. Rest of team unaware</td>
-        <td>AI classifies severity — sends Slack notification to entire team for critical alerts. Noise filtered automatically</td>
-        <td>Team informed instantly via Slack</td>
-        <td>Alert response time, team notification coverage</td>
-      </tr>
-      <tr>
-        <td>Agent Support & Guidance</td>
-        <td>Always available — reactive throughout day. Time counted within Ticket Quality Review (8 hrs/day)</td>
-        <td>AI handles first-level agent queries — Vaibhav handles only complex escalations</td>
-        <td>Vaibhav focuses on complex coaching only</td>
-        <td>Agent queries escalated to Vaibhav before vs after</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="summary-box" style="margin-top:20px;">
-    <p><strong>Measurement approach:</strong> The "After AI" column will be filled in after pilot implementation using the same self-reported method Vaibhav used for the baseline. Ops Dashboard metrics — FRT, Quality Score, Triage % — will serve as objective before vs after data points, as they are already tracked weekly.</p>
-  </div>
-</section>
-<hr class="divider">
-
-<!-- SECTION 7: PILOT MEASUREMENT PLAN -->
-<section>
-  <div class="section-label">07 · Pilot Measurement Plan</div>
-  <h2>How We Will Measure Impact</h2>
-  <p>This section defines exactly how we will prove AI made a difference — before implementation, during the pilot, and after.</p>
-
-  <table class="data-table">
-    <thead><tr><th>Step</th><th>What</th><th>When</th><th>Who</th></tr></thead>
-    <tbody>
-      <tr><td>Baseline Lock</td><td>Confirm and document all current time data — this document serves as the baseline record</td><td>Before AI implementation begins</td><td>Samuel + Vaibhav</td></tr>
-      <tr><td>AI Implementation</td><td>Deploy first AI agents — starting with SFDC Smart Alert System (Vaibhav's own proposal — highest immediate value)</td><td>To be confirmed after Piyush Sir approval</td><td>Samuel</td></tr>
-      <tr><td>Weekly Check-in</td><td>5-minute weekly update from Vaibhav — any noticeable time changes, friction, or feedback</td><td>Every week during pilot</td><td>Vaibhav → Samuel</td></tr>
-      <tr><td>Ops Dashboard Review</td><td>Compare FRT, Quality Score, Triage % vs pre-pilot baseline — same dashboard already in use</td><td>End of pilot period</td><td>Abhinav + Samuel + Piyush Sir</td></tr>
-      <tr><td>After AI Time Capture</td><td>Vaibhav fills in actual time per task — same format as current baseline</td><td>End of pilot period</td><td>Vaibhav</td></tr>
-      <tr><td>Results Presentation</td><td>Before vs after report presented to Piyush Sir — using Ops Dashboard data + Vaibhav's time data</td><td>End of pilot period</td><td>Samuel</td></tr>
-    </tbody>
-  </table>
-
-  <div class="summary-box" style="margin-top:20px;">
-    <p><strong>Key principle:</strong> No new tracking system will be introduced. The Ops Dashboard that Abhinav already fills in weekly is the primary measurement tool. AI impact will be visible in the same report — no extra work for the team.</p>
-  </div>
-</section>
-<hr class="divider">
+</div>
 
 <footer>
-  <p><strong>Project RISE — Board AIJD — Vaibhav (Brian)</strong> · Equinox Agents · August 2026</p>
-  <p style="margin-top:6px;">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
-  <p style="margin-top:12px; font-style:italic; color:#CBD5E1;">"AI handles the searching. Vaibhav focuses on solving."</p>
+  <p><strong>Project RISE — Board AIJD — Vaibhav (Brian) v2</strong> · Equinox Agents · August 2026</p>
+  <p style="margin-top:4px;">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
 </footer>
+
+<script>
+  function toggle(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
 
 </body>
 </html>
