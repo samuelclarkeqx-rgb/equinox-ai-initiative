@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project RISE — Board AIJD — Robert (QA)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F8FAFC; color:#0F172A; font-family:'Inter',sans-serif; line-height:1.6; }
+
+  .hero { background:#1E3A5F; padding:48px 40px 40px; }
+  .hero-badge { display:inline-block; background:rgba(126,179,232,0.15); border:1px solid rgba(126,179,232,0.3); color:#7EB3E8; padding:4px 14px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:18px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(24px,4vw,42px); font-weight:700; color:#FFFFFF; margin-bottom:6px; letter-spacing:-0.5px; }
+  .hero h1 span { color:#7EB3E8; }
+  .hero-sub { font-size:14px; color:#A8C8E8; margin-bottom:24px; }
+  .hero-meta { display:flex; gap:28px; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:10px; color:#7EB3E8; text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:13px; font-weight:600; color:#F1F5F9; margin-top:1px; }
+
+  .container { max-width:860px; margin:0 auto; padding:0 32px 64px; }
+
+  .section-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:10px; margin-top:20px; overflow:hidden; }
+  .section-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; cursor:pointer; user-select:none; transition:background 0.15s; }
+  .section-header:hover { background:#F8FAFC; }
+  .section-header-left { display:flex; align-items:center; gap:14px; }
+  .section-num { width:28px; height:28px; border-radius:6px; background:#1E3A5F; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .section-title { font-size:15px; font-weight:600; color:#0F172A; }
+  .section-summary { font-size:12px; color:#64748B; margin-top:2px; }
+  .section-chevron { color:#94A3B8; font-size:18px; transition:transform 0.2s; flex-shrink:0; }
+  .section-card.open .section-chevron { transform:rotate(180deg); }
+  .section-body { display:none; padding:0 24px 24px; border-top:1px solid #F1F5F9; }
+  .section-card.open .section-body { display:block; }
+
+  .field-label { font-size:10px; font-weight:700; color:#1E6FD9; text-transform:uppercase; letter-spacing:1px; margin:20px 0 6px; }
+  .field-value { font-size:13px; color:#334155; line-height:1.65; }
+
+  .resp-list { list-style:none; margin-top:4px; }
+  .resp-list li { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid #F1F5F9; font-size:13px; color:#334155; }
+  .resp-list li:last-child { border-bottom:none; }
+  .resp-list li::before { content:'▸'; color:#1E6FD9; font-size:11px; margin-top:2px; flex-shrink:0; }
+
+  .cap-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .cap-card { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:12px 16px; }
+  .cap-card h4 { font-size:12px; font-weight:600; color:#0D9E75; margin-bottom:4px; }
+  .cap-card p { font-size:12px; color:#64748B; line-height:1.5; }
+
+  .qa-scorecard { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:16px; margin-top:8px; }
+  .qa-category { margin-bottom:12px; }
+  .qa-category h4 { font-size:12px; font-weight:700; color:#1E3A5F; margin-bottom:6px; }
+  .qa-row { display:flex; justify-content:space-between; font-size:12px; color:#334155; padding:4px 0; border-bottom:1px solid #F1F5F9; }
+  .qa-row:last-child { border-bottom:none; }
+  .qa-weight { font-weight:600; color:#1E6FD9; }
+
+  .measure-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:12px; }
+  .measure-table th { background:#1E3A5F; color:#fff; padding:8px 14px; text-align:left; font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+  .measure-table td { padding:9px 14px; border-bottom:1px solid #F1F5F9; color:#334155; vertical-align:top; }
+  .measure-table tr:last-child td { border-bottom:none; }
+  .measure-table td:first-child { font-weight:500; color:#0F172A; }
+  .measure-table tr:nth-child(even) td { background:#F8FAFC; }
+
+  .tag { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; }
+  .tag-leading { background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE; }
+  .tag-lagging { background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; }
+  .tag-ai { background:#FFF7ED; color:#C2410C; border:1px solid #FED7AA; }
+
+  .boundary { background:#FFF1F2; border:1px solid #FECDD3; border-radius:6px; padding:10px 14px; font-size:12px; color:#9F1239; margin-top:8px; }
+  .placeholder { background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:10px 14px; font-size:12px; color:#92400E; margin-top:8px; }
+
+  .loop { display:flex; align-items:center; gap:0; margin-top:12px; flex-wrap:wrap; }
+  .loop-step { background:#EBF3FB; border:1px solid #BFDBFE; border-radius:8px; padding:10px 14px; font-size:11px; font-weight:600; color:#1E3A5F; text-align:center; flex:1; min-width:100px; }
+  .loop-arrow { color:#94A3B8; font-size:16px; padding:0 6px; flex-shrink:0; }
+
+  footer { text-align:center; padding:32px; border-top:1px solid #E2E8F0; background:#fff; color:#94A3B8; font-size:12px; }
+  footer strong { color:#1E3A5F; }
+
+  @media(max-width:600px) {
+    .hero { padding:32px 20px; }
+    .container { padding:0 16px 48px; }
+    .cap-grid { grid-template-columns:1fr; }
+    .hero-meta { gap:16px; }
+    .section-header { padding:14px 16px; }
+    .section-body { padding:0 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Project RISE · Board · AIJD</div>
+  <h1>Robert + <span>AI Partner</span></h1>
+  <p class="hero-sub">Quality Analyst — Board & KIPU Processes · Human Role alongside AI Role</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Submitted to</div><div class="value">Piyush Parikh & Ashwin</div></div>
+    <div class="hero-meta-item"><div class="label">Prepared by</div><div class="value">Samuel</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">August 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Version</div><div class="value">v1 — 6-Section Format</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: HUMAN ROLE -->
+  <div class="section-card open" id="s1">
+    <div class="section-header" onclick="toggle('s1')">
+      <div class="section-header-left">
+        <div class="section-num">1</div>
+        <div>
+          <div class="section-title">Human Role</div>
+          <div class="section-summary">Who Robert is and what he is responsible for</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <div class="field-label">Role Title</div>
+      <div class="field-value">Quality Analyst — Board & KIPU Processes</div>
+
+      <div class="field-label">Role Purpose</div>
+      <div class="field-value">Robert exists to drive service excellence across Board and KIPU processes — ensuring agents deliver consistently high-quality interactions, identifying performance risks early, and creating a feedback loop that continuously improves both agent behaviour and process standards.</div>
+
+      <div class="field-label">Primary Outcomes</div>
+      <ul class="resp-list" style="margin-top:8px;">
+        <li>QA scores maintained at target — 95%+ Cloud & Product, 100% Premium</li>
+        <li>Agents receiving structured, timely feedback that improves their performance</li>
+        <li>Quality risks identified and escalated before they impact SLA or CSAT</li>
+        <li>Consistent evaluation standards across all auditors and clients</li>
+        <li>Leadership and clients receiving accurate quality reporting on time</li>
+      </ul>
+
+      <div class="field-label">Key Responsibilities</div>
+      <ul class="resp-list">
+        <li>Quality audits across Chat, Voice, and Email — Board & KIPU</li>
+        <li>DSAT & NPS analysis — identify trends and customer pain points</li>
+        <li>Weekly QA feedback and coaching recommendations to agents</li>
+        <li>Weekly & monthly performance reports — quality metrics and insights</li>
+        <li>Monthly RED Alert Reports — critical quality and operational risks</li>
+        <li>QA calibration sessions — internal teams and clients</li>
+        <li>JMS sessions with Team Leaders — performance review and alignment</li>
+        <li>Root Cause Analysis (RCA) for SLA breach tickets</li>
+        <li>Process gap identification and corrective action recommendations</li>
+        <li>Continuous improvement monitoring — adherence to standards and SOPs</li>
+      </ul>
+
+      <div class="field-label">Current QA Scorecard — Board</div>
+      <div class="qa-scorecard">
+        <div class="qa-category">
+          <h4>Customer Engagement & Communication — 22%</h4>
+          <div class="qa-row"><span>FRT Adherence (45 min)</span><span class="qa-weight">7%</span></div>
+          <div class="qa-row"><span>Active Listening</span><span class="qa-weight">4%</span></div>
+          <div class="qa-row"><span>Acknowledgment & Empathy</span><span class="qa-weight">4%</span></div>
+          <div class="qa-row"><span>Email Etiquette & Proofreading</span><span class="qa-weight">7%</span></div>
+        </div>
+        <div class="qa-category">
+          <h4>Troubleshooting & Resolution — 52%</h4>
+          <div class="qa-row"><span>Probing</span><span class="qa-weight">7%</span></div>
+          <div class="qa-row"><span>Accurate & Complete Information</span><span class="qa-weight">10%</span></div>
+          <div class="qa-row"><span>Correct User/Queue Assignment</span><span class="qa-weight">12%</span></div>
+          <div class="qa-row"><span>Used Internal Resources (Teams/SOPs/KCS/SFDC)</span><span class="qa-weight">8%</span></div>
+          <div class="qa-row"><span>Email Sent</span><span class="qa-weight">8%</span></div>
+          <div class="qa-row"><span>Ticket Closed Accurately</span><span class="qa-weight">7%</span></div>
+        </div>
+        <div class="qa-category">
+          <h4>Ticket Management & Process Adherence — 26%</h4>
+          <div class="qa-row"><span>Salesforce Documentation</span><span class="qa-weight">8%</span></div>
+          <div class="qa-row"><span>Attached KCS (if available)</span><span class="qa-weight">5%</span></div>
+          <div class="qa-row"><span>Appropriate Status Assigned</span><span class="qa-weight">5%</span></div>
+          <div class="qa-row"><span>Clear & Complete Notes</span><span class="qa-weight">8%</span></div>
+        </div>
+      </div>
+
+      <div class="field-label">What Only Robert Can Do</div>
+      <ul class="resp-list">
+        <li>Calibration sessions — judgment, facilitation, client relationship</li>
+        <li>JMS sessions with Team Leaders — coaching, alignment, sensitive feedback</li>
+        <li>Stakeholder management — client QA governance and escalations</li>
+        <li>Final RCA decisions — human judgment on complex breach scenarios</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AI ROLE -->
+  <div class="section-card" id="s2">
+    <div class="section-header" onclick="toggle('s2')">
+      <div class="section-header-left">
+        <div class="section-num">2</div>
+        <div>
+          <div class="section-title">AI Role</div>
+          <div class="section-summary">Board QA Copilot — one AI partner, multiple capabilities</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <div class="field-label">AI Role Name</div>
+      <div class="field-value"><strong>Board QA Copilot</strong></div>
+
+      <div class="field-label">Purpose</div>
+      <div class="field-value">Help Robert achieve broader, faster, and more consistent quality coverage — by automating ticket pre-screening, surfacing patterns in agent errors, and drafting reports and feedback — so Robert can focus on coaching, calibration, and quality governance.</div>
+
+      <div class="field-label">Boundaries</div>
+      <div class="boundary">AI pre-screens and flags only. Robert reviews every AI assessment before feedback is shared with agents or leadership. AI never delivers feedback to agents directly. AI never finalises RCA or calibration outcomes — those require Robert's human judgment.</div>
+
+      <div class="field-label">Capabilities</div>
+      <div class="cap-grid">
+        <div class="cap-card">
+          <h4>Automated QA Pre-Screening</h4>
+          <p>AI evaluates tickets against the scorecard criteria — flags likely fails and near-misses for Robert to review. Clean tickets surface separately.</p>
+        </div>
+        <div class="cap-card">
+          <h4>DSAT & NPS Pattern Analyser</h4>
+          <p>Automatically analyses DSAT and NPS data — identifies recurring themes, agent patterns, and customer pain points before Robert reviews.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Feedback Draft Generator</h4>
+          <p>Drafts structured weekly QA feedback for each agent based on audit findings — Robert reviews, edits, and delivers.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Report Generator</h4>
+          <p>Auto-compiles weekly and monthly quality reports — metrics, trends, and highlights — ready for Robert to review and distribute.</p>
+        </div>
+        <div class="cap-card">
+          <h4>RED Alert Detector</h4>
+          <p>Monitors quality metrics continuously — flags when scores or trends cross RED Alert thresholds for Robert to escalate.</p>
+        </div>
+        <div class="cap-card">
+          <h4>RCA Assistant</h4>
+          <p>For SLA breach tickets, AI surfaces ticket history, agent actions, and similar past breaches — gives Robert a starting point for RCA investigation.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Calibration Prep</h4>
+          <p>Selects representative audit samples for calibration sessions — covers edge cases, disputed tickets, and common error patterns.</p>
+        </div>
+        <div class="cap-card">
+          <h4>Process Gap Identifier</h4>
+          <p>Tracks recurring SOP deviations across agents and ticket types — surfaces patterns that indicate process gaps vs individual agent errors.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: HUMAN MEASURES -->
+  <div class="section-card" id="s3">
+    <div class="section-header" onclick="toggle('s3')">
+      <div class="section-header-left">
+        <div class="section-num">3</div>
+        <div>
+          <div class="section-title">Human Measures</div>
+          <div class="section-summary">Leading & lagging indicators for Robert's performance</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Indicator</th><th>Type</th><th>Target</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>QA audits completed per week</td><td><span class="tag tag-leading">Leading</span></td><td>Consistent coverage across agents</td><td>QA audit logs</td></tr>
+          <tr><td>Agent feedback delivered on time</td><td><span class="tag tag-leading">Leading</span></td><td>Weekly — every agent</td><td>Feedback delivery records</td></tr>
+          <tr><td>Calibration sessions conducted</td><td><span class="tag tag-leading">Leading</span></td><td>Regular cadence with team & client</td><td>Session logs</td></tr>
+          <tr><td>RCA completed for SLA breaches</td><td><span class="tag tag-leading">Leading</span></td><td>100% of SLA breach tickets</td><td>RCA reports</td></tr>
+          <tr><td>Agent repeat errors decreasing</td><td><span class="tag tag-leading">Leading</span></td><td>Month-on-month improvement after coaching</td><td>QA trend data</td></tr>
+          <tr><td>Team QA Score — Board Cloud & Product</td><td><span class="tag tag-lagging">Lagging</span></td><td>95%+</td><td>Ops Dashboard</td></tr>
+          <tr><td>Team QA Score — Board Premium</td><td><span class="tag tag-lagging">Lagging</span></td><td>100%</td><td>Ops Dashboard</td></tr>
+          <tr><td>RED Alert reports issued on time</td><td><span class="tag tag-lagging">Lagging</span></td><td>Monthly — on time</td><td>Report delivery logs</td></tr>
+          <tr><td>DSAT rate</td><td><span class="tag tag-lagging">Lagging</span></td><td>Decreasing trend</td><td>DSAT analysis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: AI MEASURES -->
+  <div class="section-card" id="s4">
+    <div class="section-header" onclick="toggle('s4')">
+      <div class="section-header-left">
+        <div class="section-num">4</div>
+        <div>
+          <div class="section-title">AI Measures</div>
+          <div class="section-summary">How we know the AI partner is working before outcomes change</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Indicator</th><th>Type</th><th>What it tells us</th></tr></thead>
+        <tbody>
+          <tr><td>QA pre-screen accuracy rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are AI QA flags matching Robert's final assessment?</td></tr>
+          <tr><td>Feedback draft acceptance rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are AI feedback drafts good enough to use with minimal edits?</td></tr>
+          <tr><td>Report accuracy vs source data</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are AI-generated reports matching actual quality data?</td></tr>
+          <tr><td>RED Alert detection rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Are RED Alerts being flagged before Robert would have caught them manually?</td></tr>
+          <tr><td>RCA suggestion relevance rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>Is AI surfacing useful context for RCA investigations?</td></tr>
+          <tr><td>Human correction rate</td><td><span class="tag tag-ai">AI Leading</span></td><td>How often does Robert need to override or correct AI assessment?</td></tr>
+          <tr><td>Repeat AI errors</td><td><span class="tag tag-ai">AI Leading</span></td><td>Is AI consistently misclassifying the same scorecard criteria?</td></tr>
+          <tr><td>Audit coverage increase</td><td><span class="tag tag-ai">AI Leading</span></td><td>With AI pre-screening, is Robert able to review more tickets in the same time?</td></tr>
+        </tbody>
+      </table>
+      <div class="placeholder">⏳ AI outcome targets will be set after pilot testing provides reliable evidence. No assumed numbers.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: HUMAN + AI MEASURES -->
+  <div class="section-card" id="s5">
+    <div class="section-header" onclick="toggle('s5')">
+      <div class="section-header-left">
+        <div class="section-num">5</div>
+        <div>
+          <div class="section-title">Human + AI Measures</div>
+          <div class="section-summary">Does the combination outperform human alone?</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <table class="measure-table">
+        <thead><tr><th>Measure</th><th>Baseline</th><th>After Pilot</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Team QA Score — Board</td><td>Per Ops Dashboard</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Ops Dashboard</td></tr>
+          <tr><td>Audit coverage per week</td><td>Current manual audit count</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>QA audit logs</td></tr>
+          <tr><td>Time to deliver agent feedback</td><td>Current turnaround</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>Feedback delivery records</td></tr>
+          <tr><td>Agent repeat error rate</td><td>Current QA trend</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>QA audit scores</td></tr>
+          <tr><td>DSAT rate</td><td>Current DSAT trend</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>DSAT analysis</td></tr>
+          <tr><td>RED Alert detection — time to flag</td><td>Current manual detection speed</td><td><span class="placeholder" style="display:inline;padding:2px 8px;">Measured after pilot</span></td><td>RED Alert logs</td></tr>
+        </tbody>
+      </table>
+      <div class="placeholder">⏳ Baseline values to be confirmed with Robert. "After Pilot" column will be filled after pilot implementation — no new tracking system needed beyond existing QA records.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: TEAM LEADER AI -->
+  <div class="section-card" id="s6">
+    <div class="section-header" onclick="toggle('s6')">
+      <div class="section-header-left">
+        <div class="section-num">6</div>
+        <div>
+          <div class="section-title">Team Leader AI</div>
+          <div class="section-summary">How Robert's AI partner gets managed and improved</div>
+        </div>
+      </div>
+      <div class="section-chevron">▾</div>
+    </div>
+    <div class="section-body">
+      <div class="field-label">What the Team Leader AI Monitors</div>
+      <ul class="resp-list">
+        <li>Robert's QA audit coverage and feedback delivery consistency</li>
+        <li>AI Copilot's leading indicators — pre-screen accuracy, draft quality, alert detection</li>
+        <li>Combined Human + AI quality outcomes vs baseline</li>
+      </ul>
+
+      <div class="field-label">What it Identifies</div>
+      <ul class="resp-list">
+        <li>Scorecard criteria where AI pre-screening is consistently wrong</li>
+        <li>Agents with recurring errors that coaching hasn't resolved</li>
+        <li>Process gaps vs individual agent errors — pattern distinction</li>
+        <li>AI capabilities not being used by Robert — flagging underutilisation</li>
+        <li>Calibration misalignments — where AI and Robert consistently disagree</li>
+      </ul>
+
+      <div class="field-label">The Improvement Loop</div>
+      <div class="loop">
+        <div class="loop-step">AI pre-screens tickets</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Robert reviews & decides</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Outcomes measured</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Patterns detected</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">AI scoring improved</div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step">Results measured again</div>
+      </div>
+
+      <div class="placeholder" style="margin-top:16px;">⏳ Team Leader AI monitoring capabilities will be defined after pilot data is collected. Placeholders mark where we do not yet have answers.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>Project RISE — Board AIJD — Robert (QA) v1</strong> · Equinox Agents · August 2026</p>
+  <p style="margin-top:4px;">Prepared by Samuel · Submitted to Piyush Parikh & Ashwin, Co-Founders</p>
+</footer>
+
+<script>
+  function toggle(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
