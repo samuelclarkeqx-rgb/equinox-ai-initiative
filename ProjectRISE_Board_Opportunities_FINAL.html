@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project RISE — Board AI Opportunities</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F8FAFC; color:#0F172A; font-family:'Inter',sans-serif; line-height:1.6; }
+
+  .hero { background:#1E3A5F; padding:48px 40px 40px; }
+  .hero-badge { display:inline-block; background:rgba(126,179,232,0.15); border:1px solid rgba(126,179,232,0.3); color:#7EB3E8; padding:4px 14px; border-radius:100px; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:18px; }
+  .hero h1 { font-family:'Space Grotesk',sans-serif; font-size:clamp(24px,4vw,42px); font-weight:700; color:#fff; margin-bottom:6px; }
+  .hero h1 span { color:#7EB3E8; }
+  .hero-sub { font-size:14px; color:#A8C8E8; margin-bottom:24px; }
+  .hero-meta { display:flex; gap:28px; flex-wrap:wrap; }
+  .hero-meta-item .label { font-size:10px; color:#7EB3E8; text-transform:uppercase; letter-spacing:1px; }
+  .hero-meta-item .value { font-size:13px; font-weight:600; color:#F1F5F9; margin-top:1px; }
+
+  .container { max-width:900px; margin:0 auto; padding:0 32px 64px; }
+
+  /* BUBBLE CHART */
+  .chart-wrap { background:#fff; border:1px solid #E2E8F0; border-radius:10px; margin-top:24px; overflow:hidden; }
+  .chart-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; cursor:pointer; }
+  .chart-header:hover { background:#F8FAFC; }
+  .chart-header-left { display:flex; align-items:center; gap:14px; }
+  .chart-num { width:28px; height:28px; border-radius:6px; background:#1E3A5F; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .chart-title { font-size:15px; font-weight:600; }
+  .chart-sub { font-size:12px; color:#64748B; margin-top:2px; }
+  .chevron { color:#94A3B8; font-size:18px; transition:transform 0.2s; }
+  .chart-wrap.open .chevron { transform:rotate(180deg); }
+  .chart-body { display:none; padding:24px; border-top:1px solid #F1F5F9; }
+  .chart-wrap.open .chart-body { display:block; }
+
+  .bubble-container { position:relative; width:100%; height:320px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; margin-bottom:16px; overflow:hidden; }
+  .axis-x { position:absolute; bottom:32px; left:60px; right:20px; height:1px; background:#E2E8F0; }
+  .axis-y { position:absolute; left:60px; top:20px; bottom:32px; width:1px; background:#E2E8F0; }
+  .axis-label-x { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); font-size:10px; color:#94A3B8; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+  .axis-label-y { position:absolute; left:8px; top:50%; transform:translateY(-50%) rotate(-90deg); font-size:10px; color:#94A3B8; font-weight:600; text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
+  .axis-low-x { position:absolute; bottom:36px; left:65px; font-size:9px; color:#94A3B8; }
+  .axis-high-x { position:absolute; bottom:36px; right:20px; font-size:9px; color:#94A3B8; }
+  .axis-low-y { position:absolute; left:65px; bottom:36px; font-size:9px; color:#94A3B8; }
+  .axis-high-y { position:absolute; left:65px; top:20px; font-size:9px; color:#94A3B8; }
+
+  .bubble { position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s; }
+  .bubble:hover { transform:scale(1.08); box-shadow:0 4px 20px rgba(0,0,0,0.15); }
+  .bubble span { font-size:11px; font-weight:700; color:#fff; text-align:center; line-height:1.2; }
+  .bubble .effort { font-size:9px; color:rgba(255,255,255,0.8); margin-top:2px; }
+
+  .legend { display:flex; gap:20px; flex-wrap:wrap; margin-top:8px; align-items:center; }
+  .legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:#64748B; }
+  .legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .legend-size { display:flex; align-items:center; gap:6px; font-size:11px; color:#64748B; }
+  .legend-bubble-sm { width:12px; height:12px; border-radius:50%; background:#94A3B8; opacity:0.6; }
+  .legend-bubble-lg { width:20px; height:20px; border-radius:50%; background:#94A3B8; opacity:0.6; }
+
+  /* OPPORTUNITY CARDS */
+  .opp-card { background:#fff; border:1px solid #E2E8F0; border-radius:10px; margin-top:16px; overflow:hidden; }
+  .opp-header { display:flex; align-items:center; gap:14px; padding:16px 20px; cursor:pointer; }
+  .opp-header:hover { background:#F8FAFC; }
+  .opp-num { width:28px; height:28px; border-radius:6px; font-size:11px; font-weight:700; color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .opp-title-wrap { flex:1; }
+  .opp-title { font-size:14px; font-weight:600; color:#0F172A; }
+  .opp-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+  .tag { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:600; }
+  .tag-green { background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; }
+  .tag-red { background:#FFF1F2; color:#9F1239; border:1px solid #FECDD3; }
+  .tag-yellow { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+  .tag-blue { background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE; }
+  .tag-purple { background:#FAF5FF; color:#7E22CE; border:1px solid #E9D5FF; }
+  .opp-chevron { color:#94A3B8; font-size:16px; transition:transform 0.2s; flex-shrink:0; }
+  .opp-card.open .opp-chevron { transform:rotate(180deg); }
+  .opp-body { display:none; padding:0 20px 20px; border-top:1px solid #F1F5F9; }
+  .opp-card.open .opp-body { display:block; }
+
+  .field-label { font-size:10px; font-weight:700; color:#1E6FD9; text-transform:uppercase; letter-spacing:1px; margin:16px 0 6px; }
+  .field-value { font-size:13px; color:#334155; line-height:1.65; }
+  .resp-list { list-style:none; margin-top:4px; }
+  .resp-list li { display:flex; gap:10px; padding:6px 0; border-bottom:1px solid #F1F5F9; font-size:13px; color:#334155; }
+  .resp-list li:last-child { border-bottom:none; }
+  .resp-list li::before { content:'▸'; color:#1E6FD9; font-size:11px; margin-top:2px; flex-shrink:0; }
+
+  .client-req { display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:8px; margin-top:8px; font-size:13px; font-weight:500; }
+  .client-no { background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0; }
+  .client-partial { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; }
+  .client-yes { background:#FFF1F2; color:#9F1239; border:1px solid #FECDD3; }
+  .client-req .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .client-no .dot { background:#15803D; }
+  .client-partial .dot { background:#92400E; }
+  .client-yes .dot { background:#9F1239; }
+
+  .meta-row { display:flex; gap:16px; flex-wrap:wrap; margin-top:8px; }
+  .meta-item { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:8px 14px; }
+  .meta-item .m-label { font-size:10px; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; }
+  .meta-item .m-value { font-size:13px; font-weight:600; color:#0F172A; margin-top:2px; }
+
+  .phase-badge { display:inline-block; padding:3px 10px; border-radius:100px; font-size:10px; font-weight:700; margin-left:8px; vertical-align:middle; }
+  .phase1 { background:#F0FDF4; color:#15803D; }
+  .phase2 { background:#EFF6FF; color:#1D4ED8; }
+
+  footer { text-align:center; padding:32px; border-top:1px solid #E2E8F0; background:#fff; color:#94A3B8; font-size:12px; }
+
+  @media(max-width:600px) {
+    .hero { padding:32px 20px; }
+    .container { padding:0 16px 48px; }
+    .bubble-container { height:260px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Project RISE · Board · AI Opportunities</div>
+  <h1>Board <span>AI Roadmap</span></h1>
+  <p class="hero-sub">Priority, Timeline, Client Requirements & Implementation Plan</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="label">Submitted to</div><div class="value">Piyush Parikh & Ashwin</div></div>
+    <div class="hero-meta-item"><div class="label">Prepared by</div><div class="value">Samuel</div></div>
+    <div class="hero-meta-item"><div class="label">Date</div><div class="value">September 2026</div></div>
+    <div class="hero-meta-item"><div class="label">Source</div><div class="value">Abhinav Role Discovery</div></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- BUBBLE CHART -->
+  <div class="chart-wrap open" id="chart">
+    <div class="chart-header" onclick="toggleChart()">
+      <div class="chart-header-left">
+        <div class="chart-num">★</div>
+        <div>
+          <div class="chart-title">Opportunity Priority Chart</div>
+          <div class="chart-sub">Bubble size = effort · Color = client involvement · Position = priority & impact</div>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="chart-body">
+      <div class="bubble-container">
+        <div class="axis-x"></div>
+        <div class="axis-y"></div>
+        <div class="axis-label-x">Priority →</div>
+        <div class="axis-label-y">Business Impact ↑</div>
+        <div class="axis-low-x">Low</div>
+        <div class="axis-high-x">High</div>
+        <div class="axis-low-y">Low</div>
+        <div class="axis-high-y">High</div>
+
+        <!-- Bubble 1 — FRT Auto-Calculate — High priority, High impact, Small effort, Green -->
+        <div class="bubble" style="width:70px;height:70px;background:#0D9E75;right:80px;top:30px;" onclick="openOpp('o1')" title="FRT Auto-Calculate">
+          <span>FRT<br>Auto-Calc</span>
+          <span class="effort">2-3 days</span>
+        </div>
+
+        <!-- Bubble 2 — Zabbix Auto Email — High priority, High impact, Small effort, Yellow -->
+        <div class="bubble" style="width:75px;height:75px;background:#0D9E75;right:180px;top:50px;" onclick="openOpp('o2')" title="Zabbix Auto Email">
+          <span>Zabbix<br>Auto Email</span>
+          <span class="effort">2-3 days</span>
+        </div>
+
+        <!-- Bubble 3 — PagerDuty — Medium priority, High impact, Medium effort, Red -->
+        <div class="bubble" style="width:90px;height:90px;background:#E05C5C;left:220px;top:80px;" onclick="openOpp('o3')" title="PagerDuty AI Monitor">
+          <span>PagerDuty<br>Monitor</span>
+          <span class="effort">4-5 days</span>
+        </div>
+
+        <!-- Bubble 4 — QBR Report — Lower priority, Medium impact, Large effort, Red -->
+        <div class="bubble" style="width:105px;height:105px;background:#F59E0B;left:80px;top:130px;" onclick="openOpp('o4')" title="QBR Auto Report">
+          <span>QBR<br>Auto Report</span>
+          <span class="effort">5-7 days</span>
+        </div>
+
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#0D9E75;"></div>No client IT needed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#E05C5C;"></div>Client IT needed</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#F59E0B;"></div>Partial access needed</div>
+        <div style="width:1px;background:#E2E8F0;height:16px;"></div>
+        <div class="legend-size"><div class="legend-bubble-sm"></div>Less effort</div>
+        <div class="legend-size"><div class="legend-bubble-lg"></div>More effort</div>
+        <div style="font-size:11px;color:#64748B;">Click bubbles to see details ↓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPP 1 — FRT -->
+  <div class="opp-card" id="o1">
+    <div class="opp-header" onclick="toggleOpp('o1')">
+      <div class="opp-num" style="background:#0D9E75;">1</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">FRT Auto-Calculate from Salesforce <span class="phase-badge phase1">Phase 1</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-green">No Client IT</span>
+          <span class="tag tag-blue">Salesforce</span>
+          <span class="tag tag-blue">n8n</span>
+          <span class="tag tag-green">Quick Win</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed by Abhinav</div>
+      <div class="field-value">Agents manually enter FRT time in Google Form — and the most common mistake is entering the wrong time. This directly affects QA scores and performance data accuracy. Salesforce has the correct timestamps — but no one is using them.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">Auto-calculate FRT directly from Salesforce ticket timestamps — ticket created time vs first response time. Auto-push to Google Sheet. No manual entry by agents ever again.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — Salesforce API: pull ticket creation timestamp + first response timestamp on ticket close</li>
+        <li>Step 2 — n8n workflow: calculate FRT automatically — flag any ticket exceeding 20 min SLA</li>
+        <li>Step 3 — Auto-push calculated FRT to Google Sheet via Google Sheets API</li>
+        <li>Step 4 — Slack alert to Abhinav for any FRT breach in real time</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-no"><div class="dot"></div>None — Abhinav has Salesforce access. Can start immediately.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">2–3 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 1 — Q4 2026</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">Salesforce + n8n + Google Sheets</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">Eliminates most common agent mistake</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPP 2 — ZABBIX -->
+  <div class="opp-card" id="o2">
+    <div class="opp-header" onclick="toggleOpp('o2')">
+      <div class="opp-num" style="background:#0D9E75;">2</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">Zabbix Alert → Auto Email to Account Owner <span class="phase-badge phase1">Phase 1</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-yellow">Board IT — One Time</span>
+          <span class="tag tag-blue">Zabbix</span>
+          <span class="tag tag-blue">n8n</span>
+          <span class="tag tag-green">Quick Win</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed by Abhinav</div>
+      <div class="field-value">When a Zabbix alert fires — memory/CPU saturation on a customer VM — agent manually creates a Salesforce ticket and then manually emails the account owner and CSM. Every step is manual and depends on the agent being available and alert.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">Zabbix webhook → n8n → auto-create Salesforce ticket → auto-send email to account owner and CSM. Agent only follows the remediation steps — all communication is automated.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — Board IT enables Zabbix webhook — one-time setup — sends alert data to n8n trigger URL</li>
+        <li>Step 2 — n8n receives alert → parses VM name + saturation type → looks up account owner in Salesforce</li>
+        <li>Step 3 — Auto-creates Salesforce ticket with full alert details</li>
+        <li>Step 4 — Auto-sends email to account owner + CSM via Gmail</li>
+        <li>Step 5 — Slack notification to team channel — entire team aware, not just one agent</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-partial"><div class="dot"></div>One-time: Board IT to enable Zabbix webhook. After setup — fully automated, no ongoing client involvement.</div>
+
+      <div class="field-label">Feasibility Check Required</div>
+      <div class="client-req client-yellow" style="background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;"><div class="dot" style="background:#92400E;"></div>Zabbix webhook availability depends on Board's plan. Needs confirmation from Board IT before implementation.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">2–3 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 1 — Q4 2026</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">Zabbix + Salesforce + n8n + Gmail</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">Zero manual communication on every alert</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPP 3 — PAGERDUTY -->
+  <div class="opp-card" id="o3">
+    <div class="opp-header" onclick="toggleOpp('o3')">
+      <div class="opp-num" style="background:#E05C5C;">3</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">PagerDuty AI Monitor — Auto Grafana Check <span class="phase-badge phase2">Phase 2</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-red">Board IT Required</span>
+          <span class="tag tag-blue">PagerDuty</span>
+          <span class="tag tag-blue">Grafana</span>
+          <span class="tag tag-blue">n8n</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed by Abhinav</div>
+      <div class="field-value">PagerDuty alert fires → agent acknowledges → follows remediation steps → waits 30 minutes → manually checks Grafana to see if saturation is reducing → decides whether to restart VM. If agent is busy with another ticket, this 30-minute window is completely unmonitored.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">AI monitors Grafana automatically during the 30-minute wait period — sends status updates to agent every 5 minutes. If saturation is not reducing after 30 minutes — escalates to Abhinav and suggests VM restart automatically.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — Board IT provides PagerDuty webhook + Grafana API access</li>
+        <li>Step 2 — PagerDuty webhook → n8n trigger on new incident</li>
+        <li>Step 3 — n8n polls Grafana API every 5 minutes during incident window</li>
+        <li>Step 4 — If saturation reducing — Slack update to agent "Improving — continue monitoring"</li>
+        <li>Step 5 — If not reducing after 30 min — escalate to Abhinav + suggest restart step</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-yes"><div class="dot"></div>Board IT required — PagerDuty webhook + Grafana API access needed. Coordinate through Amy.</div>
+
+      <div class="field-label">Feasibility Check Required</div>
+      <div class="client-req" style="background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;"><div class="dot" style="background:#92400E;"></div>PagerDuty webhook available on Business/Enterprise plan only. Grafana API depends on whether Board uses self-hosted or cloud version. Both need confirmation from Board IT before scoping.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">4–5 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 2 — Q1 2027</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">PagerDuty + Grafana + n8n + Slack</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">30-min wait window fully automated</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPP 4 — QBR -->
+  <div class="opp-card" id="o4">
+    <div class="opp-header" onclick="toggleOpp('o4')">
+      <div class="opp-num" style="background:#F59E0B;">4</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">QBR Report Auto-Generation <span class="phase-badge phase2">Phase 2</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-yellow">Partial Access Needed</span>
+          <span class="tag tag-blue">Salesforce</span>
+          <span class="tag tag-blue">Claude API</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed by Abhinav</div>
+      <div class="field-value">QBR takes 6 hours to prepare. Data is pulled manually from Salesforce and client dashboard — two separate sources — then combined and formatted manually. High effort, high risk of error.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">Auto-pull QBR data from Salesforce → Claude API generates structured QBR report with insights and trends → Abhinav reviews and presents. 6 hours reduced to 30 minutes review time.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — Salesforce API: pull all QBR metrics — FRT, QA scores, ticket volumes, resolution times</li>
+        <li>Step 2 — Client dashboard: manual export or API if available from Board</li>
+        <li>Step 3 — Claude API generates structured QBR report with key insights and month-on-month trends</li>
+        <li>Step 4 — Delivered to Abhinav as formatted Google Doc — ready to present</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-partial"><div class="dot"></div>Partial — Salesforce part can start immediately. Client dashboard API access may need Board IT involvement.</div>
+
+      <div class="field-label">Feasibility Check Required</div>
+      <div class="client-req" style="background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;"><div class="dot" style="background:#92400E;"></div>Client dashboard API availability unknown — needs confirmation from Board IT. Salesforce portion is fully feasible and can be scoped independently.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">5–7 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 2 — Q1 2027</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">Salesforce + Claude API + Google Docs</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">6 hrs → 30 min per QBR</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPP 5 — ROBERT QA PRE-SCREEN -->
+  <div class="opp-card" id="o5">
+    <div class="opp-header" onclick="toggleOpp('o5')">
+      <div class="opp-num" style="background:#0D9E75;">5</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">Robert — Auto QA Pre-Screen for Email Tickets <span class="phase-badge phase1">Phase 1</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-green">No Client IT</span>
+          <span class="tag tag-blue">Salesforce</span>
+          <span class="tag tag-blue">Claude API</span>
+          <span class="tag tag-blue">Google Forms</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed</div>
+      <div class="field-value">Robert manually audits every Board email ticket — reviews tone, accuracy, SOP adherence, FRT — and submits scores in Google Forms. Every ticket reviewed from scratch takes significant time. High volume means some tickets may get less thorough review.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">Claude API pre-screens all Board email tickets automatically — flags likely fails and near-misses. Robert only reviews flagged tickets in detail. Clean tickets surface separately. Coverage increases, time saved significantly.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — Salesforce API: pull all closed Board email tickets daily</li>
+        <li>Step 2 — Claude API evaluates each ticket against QA scorecard — tone, accuracy, SOP, FRT adherence</li>
+        <li>Step 3 — Flagged tickets sent to Robert for review — with AI pre-assessment and suggested score</li>
+        <li>Step 4 — Robert reviews, adjusts if needed, submits final score to Google Forms</li>
+        <li>Step 5 — Pattern report generated weekly — recurring agent errors, SOP gaps identified automatically</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-no"><div class="dot"></div>None — Salesforce access confirmed, Google Forms is Equinox's, Claude API available. Can start immediately.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">3–4 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 1 — Q4 2026</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">Salesforce + Claude API + Google Forms</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">Full ticket coverage — less manual review time</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OPP 6 — VAIBHAV SFDC ALERT -->
+  <div class="opp-card" id="o6">
+    <div class="opp-header" onclick="toggleOpp('o6')">
+      <div class="opp-num" style="background:#0D9E75;">6</div>
+      <div class="opp-title-wrap">
+        <div class="opp-title">Vaibhav — SFDC Premium Customer Auto-Alert <span class="phase-badge phase1">Phase 1</span></div>
+        <div class="opp-tags">
+          <span class="tag tag-green">No Client IT</span>
+          <span class="tag tag-blue">Salesforce</span>
+          <span class="tag tag-blue">Google Sheets</span>
+          <span class="tag tag-blue">n8n</span>
+        </div>
+      </div>
+      <div class="opp-chevron">▾</div>
+    </div>
+    <div class="opp-body">
+
+      <div class="field-label">Problem — Confirmed by Vaibhav</div>
+      <div class="field-value">Every ticket Vaibhav opens — he manually checks a Google Sheet to identify if the customer is a Premium customer before triaging to Board T2. This takes 3 min per ticket, 45 min per day. Most common agent mistake is wrong time entry — but missing Premium identification is a critical triage error risk.</div>
+
+      <div class="field-label">AI Solution</div>
+      <div class="field-value">When a ticket opens in Salesforce — automatically check Google Sheet for Premium status — instantly show an alert on the ticket. No manual lookup. Zero chance of missing a Premium customer.</div>
+
+      <div class="field-label">How to Achieve</div>
+      <ul class="resp-list">
+        <li>Step 1 — n8n watches Salesforce for new ticket creation via webhook</li>
+        <li>Step 2 — Auto-lookup customer in Google Sheet — Premium status check</li>
+        <li>Step 3 — If Premium — auto-add a flag/note on the Salesforce ticket immediately</li>
+        <li>Step 4 — Agent sees flag on ticket open — no manual check needed</li>
+      </ul>
+
+      <div class="field-label">Client Requirement</div>
+      <div class="client-req client-no"><div class="dot"></div>None — Salesforce access confirmed, Google Sheet is Equinox's, n8n available. Can start immediately.</div>
+
+      <div class="field-label">Key Details</div>
+      <div class="meta-row">
+        <div class="meta-item"><div class="m-label">Effort</div><div class="m-value">2–3 days</div></div>
+        <div class="meta-item"><div class="m-label">Phase</div><div class="m-value">Phase 1 — Q4 2026</div></div>
+        <div class="meta-item"><div class="m-label">Tools</div><div class="m-value">Salesforce + Google Sheets + n8n</div></div>
+        <div class="meta-item"><div class="m-label">ROI</div><div class="m-value">45 min/day saved — zero Premium miss risk</div></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>Project RISE — Board AI Opportunities</strong> · Equinox Agents · September 2026</p>
+  <p style="margin-top:4px;">Prepared by Samuel · Based on Abhinav Role Discovery · Submitted to Piyush Parikh & Ashwin</p>
+</footer>
+
+<script>
+function toggleChart() {
+  document.getElementById('chart').classList.toggle('open');
+}
+function toggleOpp(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+function openOpp(id) {
+  const el = document.getElementById(id);
+  el.classList.add('open');
+  setTimeout(() => el.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+}
+</script>
+
+</body>
+</html>
