@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Board AI Initiative — Role Discovery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F8FAFC; font-family:'Inter',sans-serif; color:#0F172A; }
+
+  .header { background:#1E3A5F; padding:32px 40px; }
+  .header h1 { color:#fff; font-size:22px; font-weight:600; margin-bottom:6px; }
+  .header p { color:#A8C8E8; font-size:13px; }
+
+  .container { max-width:760px; margin:0 auto; padding:32px 24px 64px; }
+
+  .section { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:24px; margin-bottom:20px; }
+  .section-title { font-size:13px; font-weight:700; color:#1E6FD9; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid #F1F5F9; }
+
+  .question { margin-bottom:20px; }
+  .question label { display:block; font-size:13px; font-weight:500; color:#0F172A; margin-bottom:8px; line-height:1.5; }
+  .question span { font-size:11px; color:#94A3B8; display:block; margin-bottom:6px; }
+  textarea { width:100%; border:1px solid #E2E8F0; border-radius:6px; padding:10px 14px; font-family:'Inter',sans-serif; font-size:13px; color:#0F172A; resize:vertical; min-height:80px; outline:none; transition:border 0.15s; }
+  textarea:focus { border-color:#1E6FD9; }
+
+  .submit-section { text-align:center; margin-top:32px; }
+  .btn { background:#1E3A5F; color:#fff; border:none; padding:14px 40px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; }
+  .btn:hover { background:#2D5286; }
+
+  .success { display:none; background:#F0FDF4; border:1px solid #BBF7D0; border-radius:10px; padding:24px; text-align:center; margin-top:20px; }
+  .success h3 { color:#15803D; font-size:16px; margin-bottom:8px; }
+  .success p { color:#166534; font-size:13px; }
+
+  .copy-btn { background:#EBF3FB; color:#1E3A5F; border:1px solid #BFDBFE; padding:10px 24px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; margin-top:16px; }
+  .copy-btn:hover { background:#BFDBFE; }
+
+  @media(max-width:600px) {
+    .header { padding:24px 20px; }
+    .container { padding:20px 16px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Board AI Initiative — Role Discovery</h1>
+  <p>For: Abhinav Mandal | Board Team Lead · Prepared by Samuel · September 2026</p>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Section 1 — Tool Usage Per Responsibility</div>
+
+    <div class="question">
+      <label>1. For Attendance & HC Management — which tool do you use to track this? Is it manual or does a system show you the data automatically?</label>
+      <textarea id="q1" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>2. For Support Queue Management — which tool shows you the queue? Do you need to check multiple tools to get the full picture?</label>
+      <textarea id="q2" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>3. For Ticket Quality Review — where do you review tickets before submission? Do you need to open any other tool alongside it?</label>
+      <textarea id="q3" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>4. For Real-Time QA Monitoring — which tool do you use? Do you get alerts automatically or do you manually check?</label>
+      <textarea id="q4" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>5. For Ticket Troubleshooting & Coaching — when an agent comes to you with a complex ticket, which tools do you open to help them?</label>
+      <textarea id="q5" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>6. For KCS Article Creation — what is your current process from start to finish? Which tools are involved?</label>
+      <textarea id="q6" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>7. For KPI & Performance Tracking — where does this data come from? Do you pull it manually or does it auto-update somewhere?</label>
+      <textarea id="q7" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>8. For QBR Insights & Reporting — how do you compile the data? How many tools do you open to get everything you need?</label>
+      <textarea id="q8" placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2 — Cross-Tool Manual Work</div>
+
+    <div class="question">
+      <label>9. Is there any information you regularly copy from one tool and paste into another? If yes — which tools and what information?</label>
+      <textarea id="q9" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>10. Do you ever check the same information in multiple places because it is not available in one tool?</label>
+      <textarea id="q10" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>11. When you get a PagerDuty alert — what is the exact sequence of steps you follow? Which tools do you open?</label>
+      <textarea id="q11" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>12. When you get a Zabbix alert — what do you do next? Is it always the same steps or does it vary?</label>
+      <textarea id="q12" placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3 — What Gets Missed</div>
+
+    <div class="question">
+      <label>13. What is the one task that gets skipped or delayed when you are busy with something urgent?</label>
+      <textarea id="q13" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>14. Has anything ever gone wrong because a manual check was missed — for example a ticket not reviewed or an alert not acted on?</label>
+      <textarea id="q14" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>15. Which tool gives you incomplete information — where you always have to go somewhere else to get the full picture?</label>
+      <textarea id="q15" placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4 — Team Impact</div>
+
+    <div class="question">
+      <label>16. Which of your daily tasks do your agents also do manually using the same tools?</label>
+      <textarea id="q16" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>17. Which tool takes the longest to explain to a new agent?</label>
+      <textarea id="q17" placeholder="Your answer..."></textarea>
+    </div>
+
+    <div class="question">
+      <label>18. What mistakes do agents make most often that are related to these tools?</label>
+      <textarea id="q18" placeholder="Your answer..."></textarea>
+    </div>
+  </div>
+
+  <div class="submit-section">
+    <button class="btn" onclick="collectAnswers()">Submit Responses</button>
+  </div>
+
+  <div class="success" id="success">
+    <h3>Thank you, Abhinav!</h3>
+    <p>Your responses have been collected. Please copy the text below and send it to Samuel.</p>
+    <button class="copy-btn" onclick="copyText()">Copy Responses</button>
+    <pre id="output" style="margin-top:16px;text-align:left;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:16px;font-size:12px;white-space:pre-wrap;font-family:'Inter',sans-serif;color:#334155;"></pre>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "Attendance & HC Management — tool used and process",
+  "Support Queue Management — tools and process",
+  "Ticket Quality Review — tools used",
+  "Real-Time QA Monitoring — tool and alert method",
+  "Ticket Troubleshooting & Coaching — tools opened",
+  "KCS Article Creation — full process and tools",
+  "KPI & Performance Tracking — data source",
+  "QBR Insights & Reporting — tools and process",
+  "Cross-tool copy-paste work",
+  "Same info checked in multiple tools",
+  "PagerDuty alert — sequence of steps",
+  "Zabbix alert — next steps",
+  "Task most often skipped when busy",
+  "Something gone wrong due to missed manual check",
+  "Tool that gives incomplete information",
+  "Daily tasks agents also do manually",
+  "Tool hardest to explain to new agent",
+  "Most common agent mistakes related to tools"
+];
+
+function collectAnswers() {
+  let output = "BOARD AI INITIATIVE — ABHINAV ROLE DISCOVERY\n";
+  output += "==========================================\n\n";
+  
+  let hasAnswer = false;
+  for (let i = 1; i <= 18; i++) {
+    const val = document.getElementById('q' + i).value.trim();
+    if (val) hasAnswer = true;
+    output += `Q${i}. ${questions[i-1]}\n`;
+    output += `A: ${val || "(No answer provided)"}\n\n`;
+  }
+
+  if (!hasAnswer) {
+    alert("Please fill in at least some answers before submitting.");
+    return;
+  }
+
+  document.getElementById('output').textContent = output;
+  document.getElementById('success').style.display = 'block';
+  document.getElementById('success').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyText() {
+  const text = document.getElementById('output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Copied! Please paste and send to Samuel.");
+  });
+}
+</script>
+
+</body>
+</html>
